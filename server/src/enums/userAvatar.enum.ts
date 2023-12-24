@@ -1,0 +1,17 @@
+export enum UserAvatar {
+  Bowl,
+  Broccoli,
+  Burger,
+  Carrot,
+  Cauliflower,
+  Corn,
+  Guacamole,
+  Hat,
+  Hotdog,
+  Milk,
+  Onion,
+  Orange,
+  Patty,
+  Pot,
+  Salad,
+}
