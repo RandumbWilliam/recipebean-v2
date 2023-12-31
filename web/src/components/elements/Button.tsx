@@ -1,17 +1,11 @@
-"use client";
-
-import { mergeProps } from "@/lib/merge-props";
-import { mergeRefs } from "@/lib/merge-refs";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
-import React, { forwardRef, useRef } from "react";
+import React from "react";
 import {
-  useButton,
-  useFocusRing,
-  useHover,
-  type AriaButtonProps,
-} from "react-aria";
+  Button as RACButton,
+  type ButtonProps as RACButtonProps,
+} from "react-aria-components";
 
 const buttonVariants = cva(
   [
@@ -25,23 +19,21 @@ const buttonVariants = cva(
     "font-medium",
     "disabled:pointer-events-none",
     "disabled:opacity-50",
+    "outline-none",
+    "ring-offset-2",
+    "focus-visible:ring-2",
+    "ring-brink-pink-500/70",
   ],
   {
     variants: {
       variant: {
-        primary: [
-          "bg-brink-pink-500",
-          "text-white",
-          "enabled:hover:bg-brink-pink-700",
-          "disabled:opacity-50",
-        ],
+        primary: ["bg-brink-pink-500", "text-white", "hover:bg-brink-pink-700"],
         secondary: [
           "border-2",
           "border-brink-pink-500",
           "text-brink-pink-500",
-          "enabled:hover:bg-brink-pink-500",
-          "enabled:hover:text-white",
-          "disabled:opacity-50",
+          "hover:bg-brink-pink-500",
+          "hover:text-white",
         ],
       },
       size: {
@@ -58,43 +50,26 @@ const buttonVariants = cva(
 );
 
 const Spinner = () => (
-  <div className="absolute">
+  <div>
     <div className="w-4 h-4 rounded-full border-2 border-b-transparent animate-spin border-[inherit]" />
   </div>
 );
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  AriaButtonProps<"button"> &
+  RACButtonProps &
   VariantProps<typeof buttonVariants> & {
     loading?: boolean;
   };
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (props, forwardedRef) => {
-    const { children, className, variant, size, loading, disabled, ...rest } =
-      props;
-    const ref = useRef<HTMLButtonElement>(null);
-    const { focusProps, isFocusVisible } = useFocusRing();
-    const { hoverProps, isHovered } = useHover({
-      ...props,
-      isDisabled: disabled,
-    });
-    const { buttonProps, isPressed } = useButton(
-      {
-        ...rest,
-        isDisabled: disabled,
-      },
-      ref
-    );
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    const { children, className, variant, size, loading, ...rest } = props;
 
     return (
-      <button
-        ref={mergeRefs([ref, forwardedRef])}
+      <RACButton
+        ref={ref}
         className={cn(buttonVariants({ variant, size, className }))}
-        {...mergeProps(buttonProps, focusProps, hoverProps)}
-        data-pressed={isPressed || undefined}
-        data-hovered={isHovered || undefined}
-        data-focus-visible={isFocusVisible || undefined}
+        {...rest}
       >
         {loading && <Spinner />}
         <span
@@ -105,18 +80,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         >
           {children}
         </span>
-      </button>
+      </RACButton>
     );
   }
 );
 
-Button.defaultProps = {
-  variant: "primary",
-  size: "default",
-  loading: false,
-  disabled: false,
-};
-
-Button.displayName = "Button";
+Button.displayName = "Button2";
 
 export { Button, buttonVariants };

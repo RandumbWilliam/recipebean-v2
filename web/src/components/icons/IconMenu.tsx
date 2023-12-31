@@ -1,7 +1,10 @@
 import React from "react";
 import { defaultProps, type IconProps } from "./interface";
 
-export const IconMenu: React.FC<IconProps> = ({ size, color }) => {
+export const IconMenu: React.FC<IconProps> = ({
+  size = defaultProps.size,
+  color = defaultProps.color,
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +17,3 @@ export const IconMenu: React.FC<IconProps> = ({ size, color }) => {
     </svg>
   );
 };
-
-IconMenu.defaultProps = defaultProps;
