@@ -50,7 +50,7 @@ const buttonVariants = cva(
 );
 
 const Spinner = () => (
-  <div>
+  <div className="absolute">
     <div className="w-4 h-4 rounded-full border-2 border-b-transparent animate-spin border-[inherit]" />
   </div>
 );
@@ -63,13 +63,15 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    const { children, className, variant, size, loading, ...rest } = props;
+    const { children, className, variant, size, loading, isDisabled, ...rest } =
+      props;
 
     return (
       <RACButton
         ref={ref}
         className={cn(buttonVariants({ variant, size, className }))}
         {...rest}
+        isDisabled={isDisabled || loading}
       >
         {loading && <Spinner />}
         <span
