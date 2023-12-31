@@ -14,10 +14,10 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full py-4">
+    <header className="w-full py-2 md:py-4">
       <div className="wrapper flex items-center justify-between">
         <Link href="/">
-          <Logo />
+          <Logo className="h-8 md:h-12" />
         </Link>
         <div className="hidden md:flex justify-end gap-3">
           <Button variant="secondary">Log In</Button>
@@ -25,7 +25,7 @@ const Header = () => {
         </div>
         <div className="md:hidden">
           <button onClick={toggleNav}>
-            <IconMenu size={40} />
+            <IconMenu className="h-8 w-8 text-brink-pink-500" />
           </button>
         </div>
       </div>

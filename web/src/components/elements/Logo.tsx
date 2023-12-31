@@ -1,18 +1,13 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface LogoProps {
   className?: string;
-  size?: number;
 }
 
-const Logo: React.FC<LogoProps> = ({
-  className = "fill-brink-pink-500",
-  size = 55,
-}) => (
+const Logo: React.FC<LogoProps> = ({ className }) => (
   <svg
-    className={className}
-    width={size * (2591 / 563)}
-    height={size}
+    className={cn("h-12 w-auto fill-current text-brink-pink-500", className)}
     viewBox="0 0 2591 563"
     xmlns="http://www.w3.org/2000/svg"
   >
