@@ -17,6 +17,10 @@
     @apply max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full;
   }
 
+  .block-hero {
+    @apply pt-24 md:pt-32;
+  }
+
   .flex-center {
     @apply flex justify-center items-center;
   }
