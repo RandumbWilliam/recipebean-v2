@@ -4,7 +4,7 @@ import { twTheme } from "@/lib/twConfig";
 import clsx from "clsx";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { Button } from "../elements/Button";
+import { Button, buttonVariants } from "../elements/Button";
 import Logo from "../elements/Logo";
 import { IconMenu, IconX } from "../icons";
 
@@ -69,7 +69,12 @@ const Header = () => {
           </Link>
           <div className="hidden md:flex justify-end gap-3">
             <Button variant="secondary">Log In</Button>
-            <Button>Sign Up</Button>
+            <Link
+              href="/signup"
+              className={buttonVariants({ variant: "primary" })}
+            >
+              Sign Up
+            </Link>
           </div>
           <div className="md:hidden">
             <button onClick={toggleNav}>
