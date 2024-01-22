@@ -16,7 +16,6 @@ const buttonVariants = cva(
     "items-center",
     "whitespace-nowrap",
     "rounded-lg",
-    "font-medium",
     "disabled:pointer-events-none",
     "disabled:opacity-50",
     "outline-none",
