@@ -1,3 +1,9 @@
+import { Button } from "@/components/elements/Button";
+import { Input } from "@/components/elements/Input";
+import { Label } from "@/components/elements/Label";
+import { IconGoogle } from "@/components/icons";
+import Link from "next/link";
+import { TextField } from "react-aria-components";
 import Sidebar from "../components/Sidebar";
 
 const Signup = () => {
@@ -10,20 +16,46 @@ const Signup = () => {
       />
       <div className="flex flex-1 items-center justify-center 2xl:justify-start">
         <div className="px-14 py-7 w-full max-w-md 2xl:ml-28">
-          <h2 className="text-2xl font-medium">Sign up to Recipebean</h2>
-          <form className="flex flex-col">
-            <input
-              className="border border-black"
-              type="text"
-              name="fullName"
-            />
-            <input className="border border-black" type="email" name="email" />
-            <input
-              className="border border-black"
-              type="password"
-              name="password"
-            />
+          <h2 className="text-2xl font-medium mb-6">Sign up to Recipebean</h2>
+          <form className="flex flex-col gap-6">
+            <TextField>
+              <Label>Full Name</Label>
+              <Input placeholder="Full Name" />
+            </TextField>
+            <TextField>
+              <Label>Email</Label>
+              <Input type="email" placeholder="Email" />
+            </TextField>
+            <TextField>
+              <Label>Password</Label>
+              <Input type="password" placeholder="8+ characters" />
+            </TextField>
+            <div className="flex flex-col mt-5">
+              <Button type="submit">Create Account</Button>
+              <div className="relative flex py-5 items-center">
+                <div className="flex-grow border-t border-gray-400"></div>
+                <span className="flex-shrink mx-4 text-gray-400 text-sm">
+                  or
+                </span>
+                <div className="flex-grow border-t border-gray-400"></div>
+              </div>
+              <Button
+                type="submit"
+                className="bg-rich-black-500 hover:bg-rich-black-700"
+              >
+                <span className="flex items-center gap-2">
+                  <IconGoogle className="h-4 w-4" />
+                  <p>Sign up with Google</p>
+                </span>
+              </Button>
+            </div>
           </form>
+          <p className="text-center mt-5 text-sm">
+            Already have an account?{" "}
+            <Link href="/" className="text-brink-pink-500">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     </>
