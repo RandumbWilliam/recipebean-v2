@@ -68,7 +68,12 @@ const Header = () => {
             <Logo className="h-8 md:h-12" />
           </Link>
           <div className="hidden md:flex justify-end gap-3">
-            <Button variant="secondary">Log In</Button>
+            <Link
+              href="/signin"
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              Log In
+            </Link>
             <Link
               href="/signup"
               className={buttonVariants({ variant: "primary" })}
