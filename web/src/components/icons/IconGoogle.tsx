@@ -9,7 +9,7 @@ export const IconGoogle: React.FC<IconProps> = ({ className }) => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
     >
-      <g clip-path="url(#clip0_463_23)">
+      <g clipPath="url(#clip0_463_23)">
         <path
           d="M12.2363 9.81812V14.4654H18.5951C18.3159 15.96 17.4779 17.2255 16.2212 18.0764L20.0558 21.0982C22.29 19.0037 23.5789 15.9273 23.5789 12.2728C23.5789 11.4219 23.5038 10.6036 23.3641 9.81825L12.2363 9.81812Z"
           fill="#4285F4"
