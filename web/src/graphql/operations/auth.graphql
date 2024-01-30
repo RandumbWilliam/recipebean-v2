@@ -1,0 +1,5 @@
+mutation SignUp($userData: UserValidator!) {
+  signup(userData: $userData) {
+    ...UserResponse
+  }
+}

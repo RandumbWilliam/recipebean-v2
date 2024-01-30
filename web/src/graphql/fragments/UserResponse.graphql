@@ -1,0 +1,6 @@
+fragment UserResponse on User {
+  id
+  email
+  fullName
+  avatarId
+}
