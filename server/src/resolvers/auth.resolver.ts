@@ -1,13 +1,26 @@
 import { COOKIE_NAME } from "@constants";
 import { User } from "@entities/user.entity";
 import { MyContext } from "@interfaces/context.interface";
-import { AuthService } from "@services/auth.service";
 import UserValidator from "@validators/user.validator";
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+
+import { UserService } from "@/services/user.service";
+import { AuthService } from "@services/auth.service";
 
 @Resolver()
 export class AuthResolver {
   public authService = new AuthService();
+  public userService = new UserService();
+
+  @Query(() => User)
+  async myUser(@Ctx() { req }: MyContext): Promise<User | null> {
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const user = await this.userService.findById(req.session.userId);
+    return user;
+  }
 
   @Mutation(() => User)
   async signup(

@@ -124,8 +124,8 @@ export class App {
         cookie: {
           maxAge: 1000 * 60 * 60 * 24 * 1,
           httpOnly: true,
-          secure: true,
-          sameSite: PROD ? "lax" : "none",
+          secure: PROD,
+          sameSite: "lax",
         },
         saveUninitialized: false,
         secret: config.SESSION_SECRET,

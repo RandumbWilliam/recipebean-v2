@@ -9,15 +9,6 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 export class UserResolver {
   public userService = new UserService();
 
-  @Query(() => User)
-  async myUser(@Ctx() { req }: MyContext): Promise<User | null> {
-    const userId: string = req.session.userId!;
-    console.log(req.session);
-    const user: User = await this.userService.findById(userId);
-
-    return user;
-  }
-
   @Mutation(() => User)
   async updateUser(
     @Arg("userData") userData: UserValidator,
