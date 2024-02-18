@@ -4,10 +4,20 @@ import { Button } from "@/components/elements/Button";
 import { Input } from "@/components/elements/Input";
 import { Label } from "@/components/elements/Label";
 import { IconGoogle } from "@/components/icons";
-import { UserAvatar, useSignUpMutation } from "@/graphql/generated";
+import { UserAvatar } from "@/graphql/types";
 import { randomEnum } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TextField } from "react-aria-components";
+
+import {
+  SignUpDocument,
+  SignUpMutation,
+  SignUpMutationVariables,
+} from "@/graphql/operations";
+import { getUrqlClient } from "@/lib/urql";
+
+const { client } = getUrqlClient();
 
 const initialUserData = {
   fullName: "",
@@ -17,7 +27,7 @@ const initialUserData = {
 };
 
 const SignUpForm = () => {
-  const [{ fetching }, signup] = useSignUpMutation();
+  const router = useRouter();
 
   const [userData, setUserData] = useState(initialUserData);
 
@@ -28,9 +38,13 @@ const SignUpForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await signup({ userData });
-    if (response.data?.signup) {
-      console.log(response.data);
+    const result = await client.mutation<
+      SignUpMutation,
+      SignUpMutationVariables
+    >(SignUpDocument, { userData });
+
+    if (result.data?.signup) {
+      console.log(result.data.signup);
     }
   };
 
@@ -63,9 +77,7 @@ const SignUpForm = () => {
         />
       </TextField>
       <div className="flex flex-col mt-5">
-        <Button type="submit" loading={fetching}>
-          Create Account
-        </Button>
+        <Button type="submit">Create Account</Button>
         <div className="relative flex py-5 items-center">
           <div className="flex-grow border-t border-gray-400"></div>
           <span className="flex-shrink mx-4 text-gray-400 text-sm">or</span>

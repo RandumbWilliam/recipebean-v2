@@ -14,6 +14,8 @@ export class AuthResolver {
 
   @Query(() => User)
   async myUser(@Ctx() { req }: MyContext): Promise<User | null> {
+    console.log(req.session);
+
     if (!req.session.userId) {
       return null;
     }
