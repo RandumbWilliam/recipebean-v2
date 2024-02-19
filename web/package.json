@@ -1,0 +1,42 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate-graphql": "graphql-codegen --config graphql.codegen.ts"
+  },
+  "dependencies": {
+    "@graphql-codegen/import-types-preset": "^3.0.0",
+    "@urql/exchange-graphcache": "^6.4.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "graphql": "^16.8.1",
+    "next": "14.1.0",
+    "next-urql": "^5.0.2",
+    "react": "^18",
+    "react-aria": "^3.32.1",
+    "react-aria-components": "^1.1.1",
+    "react-dom": "^18",
+    "tailwind-merge": "^2.2.1",
+    "urql": "^4.0.6"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.4",
+    "@graphql-codegen/typescript-operations": "^4.1.2",
+    "@graphql-codegen/typescript-urql": "^4.0.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}

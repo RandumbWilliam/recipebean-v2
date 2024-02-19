@@ -27,20 +27,6 @@ const config: CodegenConfig = {
         importDocumentNodeExternallyFrom: "./operations.tsx",
       },
     },
-    // hooks: {
-    //   preset: "near-operation-file",
-    //   presetConfig: {
-    //     extension: ".hooks.tsx",
-    //     baseTypesPath: "../types.ts",
-    //   },
-    //   plugins: ["typescript-urql"],
-    //   config: {
-    //     withHooks: true,
-    //     importOperationTypesFrom: "Operations",
-    //     documentMode: "external",
-    //     importDocumentNodeExternallyFrom: "./operations.tsx",
-    //   },
-    // },
   },
 };
 
