@@ -14,8 +14,6 @@ export class AuthResolver {
 
   @Query(() => User)
   async myUser(@Ctx() { req }: MyContext): Promise<User | null> {
-    console.log(req.session);
-
     if (!req.session.userId) {
       return null;
     }
@@ -37,16 +35,14 @@ export class AuthResolver {
   }
 
   @Mutation(() => User)
-  async login(
+  async signin(
     @Arg("email") email: string,
     @Arg("password") password: string,
     @Ctx() { req }: MyContext
   ): Promise<User> {
-    const user: User = await this.authService.login(email, password);
+    const user: User = await this.authService.signin(email, password);
 
     req.session!.userId = user.id;
-
-    console.log(req.session);
 
     return user;
   }

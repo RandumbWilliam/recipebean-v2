@@ -36,7 +36,7 @@ export class AuthService {
     return user;
   }
 
-  public async login(email: string, password: string): Promise<User> {
+  public async signin(email: string, password: string): Promise<User> {
     const user: User | null = await DI.userRepository.findOne({
       email,
     });

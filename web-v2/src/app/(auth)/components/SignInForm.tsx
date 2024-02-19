@@ -4,18 +4,10 @@ import { Button } from "@/components/elements/Button";
 import { Input } from "@/components/elements/Input";
 import { Label } from "@/components/elements/Label";
 import { IconGoogle } from "@/components/icons";
+import { useSignInMutation } from "@/graphql/hooks";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TextField } from "react-aria-components";
-
-import {
-  LoginDocument,
-  LoginMutation,
-  LoginMutationVariables,
-} from "@/graphql/operations";
-import { getUrqlClient } from "@/lib/urql";
-
-const { client } = getUrqlClient();
 
 const initialUserData = {
   email: "",
@@ -25,6 +17,7 @@ const initialUserData = {
 const SignInForm = () => {
   const router = useRouter();
 
+  const [, signin] = useSignInMutation();
   const [userData, setUserData] = useState(initialUserData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,13 +27,10 @@ const SignInForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = await client.mutation<LoginMutation, LoginMutationVariables>(
-      LoginDocument,
-      userData
-    );
+    const result = await signin(userData);
 
-    if (result.data?.login) {
-      console.log(result.data?.login);
+    if (result.data?.signin) {
+      console.log(result.data?.signin);
     }
   };
 
