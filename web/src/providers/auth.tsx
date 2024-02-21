@@ -1,3 +1,4 @@
+import Load from "@/components/Load";
 import { useMyUserQuery } from "@/graphql/hooks";
 import { useRouter } from "next/router";
 
@@ -14,8 +15,8 @@ export default function AuthProvider({
   const authenticated = data?.myUser;
   const globalRoute = globalRoutes.includes(router.pathname);
 
-  if (fetching) {
-    return <div>Loading...</div>;
+  if (fetching || data === undefined) {
+    return <Load />;
   }
 
   if (!authenticated && !globalRoute) {

@@ -37,6 +37,15 @@ const config: Config = {
           900: "#01080f",
         },
       },
+      animation: {
+        spinner: "lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
+      },
+      keyframes: {
+        "lds-ring": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+      },
     },
   },
   plugins: [],
