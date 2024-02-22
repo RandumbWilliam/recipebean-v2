@@ -7,11 +7,10 @@ import {
 import { updateQuery } from "@/utils/updateQuery";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import { dedupExchange, fetchExchange } from "urql";
+import { isServer } from "./isServer";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/graphql";
-
-const isServer = () => typeof window === "undefined";
 
 export const urqlClient = (ssrExchange: any, ctx: any) => {
   let cookie = "";
