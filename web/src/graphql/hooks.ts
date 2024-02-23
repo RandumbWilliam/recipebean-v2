@@ -14,3 +14,7 @@ export function useSignUpMutation() {
 export function useSignInMutation() {
   return Urql.useMutation<Operations.SignInMutation, Operations.SignInMutationVariables>(Operations.SignInDocument);
 };
+
+export function useGetUserCookbooksQuery(options?: Omit<Urql.UseQueryArgs<Operations.GetUserCookbooksQueryVariables>, 'query'>) {
+  return Urql.useQuery<Operations.GetUserCookbooksQuery, Operations.GetUserCookbooksQueryVariables>({ query: Operations.GetUserCookbooksDocument, ...options });
+};
