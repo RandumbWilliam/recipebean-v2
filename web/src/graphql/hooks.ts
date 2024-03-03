@@ -18,3 +18,11 @@ export function useSignInMutation() {
 export function useGetUserCookbooksQuery(options?: Omit<Urql.UseQueryArgs<Operations.GetUserCookbooksQueryVariables>, 'query'>) {
   return Urql.useQuery<Operations.GetUserCookbooksQuery, Operations.GetUserCookbooksQueryVariables>({ query: Operations.GetUserCookbooksDocument, ...options });
 };
+
+export function useGetCookbookQuery(options: Omit<Urql.UseQueryArgs<Operations.GetCookbookQueryVariables>, 'query'>) {
+  return Urql.useQuery<Operations.GetCookbookQuery, Operations.GetCookbookQueryVariables>({ query: Operations.GetCookbookDocument, ...options });
+};
+
+export function useCreateCookbookMutation() {
+  return Urql.useMutation<Operations.CreateCookbookMutation, Operations.CreateCookbookMutationVariables>(Operations.CreateCookbookDocument);
+};

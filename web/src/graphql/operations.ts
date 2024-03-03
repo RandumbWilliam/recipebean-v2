@@ -31,6 +31,20 @@ export type GetUserCookbooksQueryVariables = Types.Exact<{ [key: string]: never;
 
 export type GetUserCookbooksQuery = { __typename?: 'Query', getUserCookbooks: Array<{ __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover }> };
 
+export type GetCookbookQueryVariables = Types.Exact<{
+  cookbookId: Types.Scalars['String']['input'];
+}>;
+
+
+export type GetCookbookQuery = { __typename?: 'Query', getCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
+
+export type CreateCookbookMutationVariables = Types.Exact<{
+  cookbookData: Types.CookbookValidator;
+}>;
+
+
+export type CreateCookbookMutation = { __typename?: 'Mutation', createCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
+
 export const CookbookResponseFragmentDoc = gql`
     fragment CookbookResponse on Cookbook {
   id
@@ -74,3 +88,21 @@ export const GetUserCookbooksDocument = gql`
   }
 }
     ${CookbookResponseFragmentDoc}`;
+export const GetCookbookDocument = gql`
+    query GetCookbook($cookbookId: String!) {
+  getCookbook(cookbookId: $cookbookId) {
+    id
+    name
+    coverId
+  }
+}
+    `;
+export const CreateCookbookDocument = gql`
+    mutation CreateCookbook($cookbookData: CookbookValidator!) {
+  createCookbook(cookbookData: $cookbookData) {
+    id
+    name
+    coverId
+  }
+}
+    `;

@@ -10,12 +10,18 @@ interface CookbookCardProps {
 
 const CookbookCard: React.FC<CookbookCardProps> = ({ className, cookbook }) => {
   return (
-    <div className="flex flex-col justify-end h-60 px-4 py-5 rounded-2xl">
-      <Image
-        src={CookbookCoverUrls[cookbook.coverId]}
-        alt="cookbook-cover"
-        fill={true}
-      />
+    <div>
+      <div className="absolute z-10 px-4 py-4 flex items-end h-48">
+        <p className="p-medium-24">{cookbook.name}</p>
+      </div>
+      <div className="relative w-full h-48 rounded-2xl overflow-hidden">
+        <Image
+          src={CookbookCoverUrls[cookbook.coverId]}
+          alt="cookbook-cover"
+          fill={true}
+          className="object-cover"
+        />
+      </div>
     </div>
   );
 };
