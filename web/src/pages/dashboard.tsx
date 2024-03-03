@@ -93,11 +93,21 @@ const Dashboard = () => {
     }
 
     return (
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {data.getUserCookbooks.map((cookbook) => (
-          <CookbookCard key={cookbook.id} cookbook={cookbook} />
-        ))}
-      </div>
+      <>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {data.getUserCookbooks.map((cookbook) => (
+            <CookbookCard key={cookbook.id} cookbook={cookbook} />
+          ))}
+        </div>
+        <div className="absolute right-2 bottom-2">
+          <Button
+            className="rounded-full p-3 block md:hidden"
+            onClick={() => setIsCookbookModalOpen(true)}
+          >
+            <IconBookAdd />
+          </Button>
+        </div>
+      </>
     );
   }
 
@@ -116,14 +126,6 @@ const Dashboard = () => {
             </Button>
           </div>
           {renderBody()}
-        </div>
-        <div className="absolute right-2 bottom-2">
-          <Button
-            className="rounded-full p-3 block md:hidden"
-            onClick={() => setIsCookbookModalOpen(true)}
-          >
-            <IconBookAdd />
-          </Button>
         </div>
       </DashboardLayout>
       <ModalOverlay
