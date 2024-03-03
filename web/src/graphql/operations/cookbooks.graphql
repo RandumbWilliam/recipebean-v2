@@ -1,0 +1,21 @@
+query GetUserCookbooks {
+  getUserCookbooks {
+    ...CookbookResponse
+  }
+}
+
+query GetCookbook($cookbookId: String!) {
+  getCookbook(cookbookId: $cookbookId) {
+    id
+    name
+    coverId
+  }
+}
+
+mutation CreateCookbook($cookbookData: CookbookValidator!) {
+  createCookbook(cookbookData: $cookbookData) {
+    id
+    name
+    coverId
+  }
+}

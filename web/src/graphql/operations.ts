@@ -2,6 +2,8 @@ import * as Types from './types';
 
 import gql from 'graphql-tag';
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type CookbookResponseFragment = { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover };
+
 export type UserResponseFragment = { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar };
 
 export type MyUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -24,6 +26,32 @@ export type SignInMutationVariables = Types.Exact<{
 
 export type SignInMutation = { __typename?: 'Mutation', signin: { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar } };
 
+export type GetUserCookbooksQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type GetUserCookbooksQuery = { __typename?: 'Query', getUserCookbooks: Array<{ __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover }> };
+
+export type GetCookbookQueryVariables = Types.Exact<{
+  cookbookId: Types.Scalars['String']['input'];
+}>;
+
+
+export type GetCookbookQuery = { __typename?: 'Query', getCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
+
+export type CreateCookbookMutationVariables = Types.Exact<{
+  cookbookData: Types.CookbookValidator;
+}>;
+
+
+export type CreateCookbookMutation = { __typename?: 'Mutation', createCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
+
+export const CookbookResponseFragmentDoc = gql`
+    fragment CookbookResponse on Cookbook {
+  id
+  name
+  coverId
+}
+    `;
 export const UserResponseFragmentDoc = gql`
     fragment UserResponse on User {
   id
@@ -53,3 +81,28 @@ export const SignInDocument = gql`
   }
 }
     ${UserResponseFragmentDoc}`;
+export const GetUserCookbooksDocument = gql`
+    query GetUserCookbooks {
+  getUserCookbooks {
+    ...CookbookResponse
+  }
+}
+    ${CookbookResponseFragmentDoc}`;
+export const GetCookbookDocument = gql`
+    query GetCookbook($cookbookId: String!) {
+  getCookbook(cookbookId: $cookbookId) {
+    id
+    name
+    coverId
+  }
+}
+    `;
+export const CreateCookbookDocument = gql`
+    mutation CreateCookbook($cookbookData: CookbookValidator!) {
+  createCookbook(cookbookData: $cookbookData) {
+    id
+    name
+    coverId
+  }
+}
+    `;
