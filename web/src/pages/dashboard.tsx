@@ -13,7 +13,7 @@ import { CookbookCoverUrls } from "@/data/cookbookCoverUrls";
 import { urqlClient } from "@/utils/urqlClient";
 
 import CookbookCard from "@/components/CookbookCard";
-import { IconCheckCircle, IconX } from "@/components/icons";
+import { IconBookAdd, IconCheckCircle, IconX } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -93,7 +93,7 @@ const Dashboard = () => {
     }
 
     return (
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {data.getUserCookbooks.map((cookbook) => (
           <CookbookCard key={cookbook.id} cookbook={cookbook} />
         ))}
@@ -107,11 +107,23 @@ const Dashboard = () => {
         <div className="wrapper">
           <div className="flex justify-between mb-6">
             <h1 className="h2-bold">Your Cookbooks</h1>
-            <Button type="button" onClick={() => setIsCookbookModalOpen(true)}>
+            <Button
+              type="button"
+              onClick={() => setIsCookbookModalOpen(true)}
+              className="hidden md:block"
+            >
               Add Cookbook
             </Button>
           </div>
           {renderBody()}
+        </div>
+        <div className="absolute right-2 bottom-2">
+          <Button
+            className="rounded-full p-3 block md:hidden"
+            onClick={() => setIsCookbookModalOpen(true)}
+          >
+            <IconBookAdd />
+          </Button>
         </div>
       </DashboardLayout>
       <ModalOverlay
@@ -141,7 +153,7 @@ const Dashboard = () => {
                     />
                     <RadioGroup onChange={handleCookbookCover}>
                       <Label>Choose a Cookbook Cover</Label>
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-1 gap-3 overflow-y-auto max-h-72 sm:grid-cols-2 md:grid-cols-3">
                         {(
                           Object.keys(CookbookCoverUrls) as Array<
                             keyof typeof CookbookCover
@@ -187,7 +199,12 @@ const Dashboard = () => {
                       </div>
                     </RadioGroup>
                     <div className="flex justify-end gap-1.5">
-                      <Button onPress={close} variant="secondary" type="button">
+                      <Button
+                        onPress={close}
+                        variant="secondary"
+                        type="button"
+                        className="hidden sm:block"
+                      >
                         Close
                       </Button>
                       <Button isDisabled={isDisabledSubmit} type="submit">
