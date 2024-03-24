@@ -27,6 +27,7 @@ export type Cookbook = Base & {
   createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  recipes: Array<Recipe>;
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 

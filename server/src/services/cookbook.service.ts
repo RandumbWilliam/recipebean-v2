@@ -13,9 +13,14 @@ export class CookbookService {
   }
 
   public async findById(cookbookId: string): Promise<Cookbook | null> {
-    const cookbook: Cookbook | null = await DI.cookbookRepository.findOne({
-      id: cookbookId,
-    });
+    const cookbook: Cookbook | null = await DI.cookbookRepository.findOne(
+      {
+        id: cookbookId,
+      },
+      {
+        populate: ["recipes"],
+      }
+    );
 
     return cookbook;
   }

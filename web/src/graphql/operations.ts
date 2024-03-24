@@ -4,6 +4,8 @@ import gql from 'graphql-tag';
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type CookbookResponseFragment = { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover };
 
+export type RecipeResponseFragment = { __typename?: 'Recipe', id: string, name: string, servings: number, prepTime: number, cookTime: number, imageUrl: string, imageId: string };
+
 export type UserResponseFragment = { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar };
 
 export type MyUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -36,7 +38,7 @@ export type GetCookbookQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetCookbookQuery = { __typename?: 'Query', getCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
+export type GetCookbookQuery = { __typename?: 'Query', getCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover, recipes: Array<{ __typename?: 'Recipe', id: string, name: string, servings: number, prepTime: number, cookTime: number, imageUrl: string, imageId: string }> } };
 
 export type CreateCookbookMutationVariables = Types.Exact<{
   cookbookData: Types.CookbookValidator;
@@ -50,6 +52,17 @@ export const CookbookResponseFragmentDoc = gql`
   id
   name
   coverId
+}
+    `;
+export const RecipeResponseFragmentDoc = gql`
+    fragment RecipeResponse on Recipe {
+  id
+  name
+  servings
+  prepTime
+  cookTime
+  imageUrl
+  imageId
 }
     `;
 export const UserResponseFragmentDoc = gql`
@@ -91,12 +104,14 @@ export const GetUserCookbooksDocument = gql`
 export const GetCookbookDocument = gql`
     query GetCookbook($cookbookId: String!) {
   getCookbook(cookbookId: $cookbookId) {
-    id
-    name
-    coverId
+    ...CookbookResponse
+    recipes {
+      ...RecipeResponse
+    }
   }
 }
-    `;
+    ${CookbookResponseFragmentDoc}
+${RecipeResponseFragmentDoc}`;
 export const CreateCookbookDocument = gql`
     mutation CreateCookbook($cookbookData: CookbookValidator!) {
   createCookbook(cookbookData: $cookbookData) {

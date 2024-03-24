@@ -6,9 +6,10 @@ query GetUserCookbooks {
 
 query GetCookbook($cookbookId: String!) {
   getCookbook(cookbookId: $cookbookId) {
-    id
-    name
-    coverId
+    ...CookbookResponse
+    recipes {
+      ...RecipeResponse
+    }
   }
 }
 
