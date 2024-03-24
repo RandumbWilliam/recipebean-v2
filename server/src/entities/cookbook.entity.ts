@@ -29,6 +29,7 @@ export class Cookbook extends Base<Cookbook> {
   @Enum({ items: () => CookbookCover })
   public coverId!: CookbookCover;
 
+  @Field(() => [Recipe])
   @ManyToMany(() => Recipe, "cookbooks", { owner: true })
   public recipes = new Collection<Recipe>(this);
 

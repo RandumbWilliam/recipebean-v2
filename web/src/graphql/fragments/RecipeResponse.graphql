@@ -1,0 +1,9 @@
+fragment RecipeResponse on Recipe {
+  id
+  name
+  servings
+  prepTime
+  cookTime
+  imageUrl
+  imageId
+}

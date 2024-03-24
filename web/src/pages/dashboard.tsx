@@ -1,5 +1,6 @@
 import { withUrqlClient } from "next-urql";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 
@@ -20,7 +21,6 @@ import { Label } from "@/components/ui/Label";
 import DashboardLayout from "@/layouts/dashboard";
 import {
   Dialog,
-  DialogTrigger,
   Heading,
   Modal,
   ModalOverlay,
@@ -64,7 +64,9 @@ const Dashboard = () => {
       });
 
       if (result.data?.createCookbook) {
-        console.log(result.data.createCookbook);
+        const cookbook = result.data.createCookbook;
+
+        router.push(`/cookbook/${cookbook.id}`);
       }
     } else {
       alert("Missing cookbook name and cover.");
@@ -85,7 +87,7 @@ const Dashboard = () => {
         <div className="flex flex-col items-center justify-center h-[500px] rounded-2xl bg-gray-100">
           <h3>No Cookbooks</h3>
 
-          <Button type="button" onClick={() => setIsCookbookModalOpen(true)}>
+          <Button type="button" onPress={() => setIsCookbookModalOpen(true)}>
             Add Cookbook
           </Button>
         </div>
@@ -96,13 +98,15 @@ const Dashboard = () => {
       <>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {data.getUserCookbooks.map((cookbook) => (
-            <CookbookCard key={cookbook.id} cookbook={cookbook} />
+            <Link key={cookbook.id} href={`/cookbook/${cookbook.id}`}>
+              <CookbookCard cookbook={cookbook} />
+            </Link>
           ))}
         </div>
         <div className="absolute right-2 bottom-2">
           <Button
             className="rounded-full p-3 block md:hidden"
-            onClick={() => setIsCookbookModalOpen(true)}
+            onPress={() => setIsCookbookModalOpen(true)}
           >
             <IconBookAdd />
           </Button>
@@ -119,7 +123,7 @@ const Dashboard = () => {
             <h1 className="h2-bold">Your Cookbooks</h1>
             <Button
               type="button"
-              onClick={() => setIsCookbookModalOpen(true)}
+              onPress={() => setIsCookbookModalOpen(true)}
               className="hidden md:block"
             >
               Add Cookbook
@@ -138,37 +142,44 @@ const Dashboard = () => {
           <Dialog className="outline-none relative">
             {({ close }) => (
               <>
-                <div className="flex flex-col gap-5">
-                  <Heading slot="title" className="h5-bold">
-                    Add Cookbook
-                  </Heading>
-                  <form
-                    onSubmit={handleCookbookSubmit}
-                    className="flex flex-col gap-3"
+                <div>
+                  <button
+                    onClick={close}
+                    className="absolute right-[-12px] top-[-12px]"
                   >
-                    <Input
-                      type="text"
-                      name="cookbookName"
-                      placeholder="Cookbook name"
-                      value={cookbookName}
-                      onChange={handleCookbookName}
-                    />
-                    <RadioGroup onChange={handleCookbookCover}>
-                      <Label>Choose a Cookbook Cover</Label>
-                      <div className="grid grid-cols-1 gap-3 overflow-y-auto max-h-72 sm:grid-cols-2 md:grid-cols-3">
-                        {(
-                          Object.keys(CookbookCoverUrls) as Array<
-                            keyof typeof CookbookCover
-                          >
-                        ).map((key) => (
-                          <Radio
-                            key={key}
-                            value={key}
-                            className={({
-                              isFocusVisible,
-                              isSelected,
-                              isPressed,
-                            }) => `
+                    <IconX className="fill-rich-black-100" />
+                  </button>
+                  <div className="flex flex-col gap-5">
+                    <Heading slot="title" className="h5-bold">
+                      Add Cookbook
+                    </Heading>
+                    <form
+                      onSubmit={handleCookbookSubmit}
+                      className="flex flex-col gap-3"
+                    >
+                      <Input
+                        type="text"
+                        name="cookbookName"
+                        placeholder="Cookbook name"
+                        value={cookbookName}
+                        onChange={handleCookbookName}
+                      />
+                      <RadioGroup onChange={handleCookbookCover}>
+                        <Label>Choose a Cookbook Cover</Label>
+                        <div className="grid grid-cols-1 gap-3 overflow-y-auto max-h-72 sm:grid-cols-2 md:grid-cols-3">
+                          {(
+                            Object.keys(CookbookCoverUrls) as Array<
+                              keyof typeof CookbookCover
+                            >
+                          ).map((key) => (
+                            <Radio
+                              key={key}
+                              value={key}
+                              className={({
+                                isFocusVisible,
+                                isSelected,
+                                isPressed,
+                              }) => `
                                   group relative rounded-xl overflow-hidden border-2 border-solid
                                   ${
                                     isFocusVisible
@@ -185,39 +196,37 @@ const Dashboard = () => {
                                   }
                                   ${!isSelected && !isPressed ? "bg-white" : ""}
                                 `}
-                          >
-                            <IconCheckCircle className="absolute z-[80] top-[4px] left-[4px] fill-brink-pink-500 hidden group-selected:block" />
-                            <div className="relative w-full h-32">
-                              <Image
-                                src={CookbookCoverUrls[key]}
-                                alt={`${key}_cookbook_cover`}
-                                fill={true}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                className="object-cover"
-                              />
-                            </div>
-                          </Radio>
-                        ))}
+                            >
+                              <IconCheckCircle className="absolute z-[80] top-[4px] left-[4px] fill-brink-pink-500 hidden group-selected:block" />
+                              <div className="relative w-full h-32">
+                                <Image
+                                  src={CookbookCoverUrls[key]}
+                                  alt={`${key}_cookbook_cover`}
+                                  fill={true}
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                  className="object-cover"
+                                />
+                              </div>
+                            </Radio>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                      <div className="flex justify-end gap-1.5">
+                        <Button
+                          onPress={close}
+                          variant="secondary"
+                          type="button"
+                          className="hidden sm:block"
+                        >
+                          Close
+                        </Button>
+                        <Button isDisabled={isDisabledSubmit} type="submit">
+                          Confirm
+                        </Button>
                       </div>
-                    </RadioGroup>
-                    <div className="flex justify-end gap-1.5">
-                      <Button
-                        onPress={close}
-                        variant="secondary"
-                        type="button"
-                        className="hidden sm:block"
-                      >
-                        Close
-                      </Button>
-                      <Button isDisabled={isDisabledSubmit} type="submit">
-                        Confirm
-                      </Button>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
-                <button onClick={close}>
-                  <IconX className="absolute right-[-12px] top-[-12px] fill-rich-black-100" />
-                </button>
               </>
             )}
           </Dialog>
