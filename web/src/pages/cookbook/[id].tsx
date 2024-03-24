@@ -64,18 +64,18 @@ const Cookbook = () => {
   return (
     <DashboardLayout>
       <div className="wrapper">
-        <div className="flex justify-between mb-6">
-          <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 mb-6">
+          <div className="flex justify-between">
             <h1 className="h2-bold">{data?.getCookbook.name}</h1>
-            {data?.getCookbook && (
-              <p className="ml-2 text-gray-400">
-                {renderRecipeCount(data.getCookbook.recipes.length)}
-              </p>
-            )}
+            <Button type="button" className="hidden md:block">
+              Add Recipe
+            </Button>
           </div>
-          <Button type="button" className="hidden md:block">
-            Add Recipe
-          </Button>
+          {data?.getCookbook && (
+            <p className="ml-2 text-gray-400">
+              {renderRecipeCount(data.getCookbook.recipes.length)}
+            </p>
+          )}
         </div>
         {renderBody()}
       </div>
