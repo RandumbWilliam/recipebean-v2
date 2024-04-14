@@ -1,4 +1,5 @@
 import { App } from "@/app";
+
 import { AuthResolver } from "@resolvers/auth.resolver";
 import { CookbookResolver } from "@resolvers/cookbook.resolver";
 import { RecipeResolver } from "@resolvers/recipe.resolver";

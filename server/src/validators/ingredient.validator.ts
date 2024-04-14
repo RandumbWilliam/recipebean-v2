@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsOptional, IsString } from "class-validator";
 import { Field, InputType } from "type-graphql";
 import MeasurementValidator from "./measurement.validator";
@@ -7,6 +8,17 @@ class IngredientValidator {
   @Field(() => [String])
   @IsArray()
   public name: string[];
+
+  @Field(() => [MeasurementValidator], { nullable: true })
+  @Type(() => MeasurementValidator)
+  @IsArray()
+  @IsOptional()
+  public measurement?: MeasurementValidator[];
+
+  @Field(() => MeasurementValidator, { nullable: true })
+  @Type(() => MeasurementValidator)
+  @IsOptional()
+  public convertedMeasurement?: MeasurementValidator;
 
   @Field()
   @IsBoolean()
@@ -20,10 +32,6 @@ class IngredientValidator {
   @IsString()
   @IsOptional()
   public additional?: string;
-
-  @Field(() => [MeasurementValidator], { nullable: true })
-  @IsArray()
-  public measurements?: MeasurementValidator[];
 }
 
 export default IngredientValidator;

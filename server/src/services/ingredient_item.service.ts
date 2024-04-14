@@ -2,60 +2,50 @@ import DI from "@database/index";
 
 import { Ingredient } from "@entities/ingredient.entity";
 import { IngredientItem } from "@entities/ingredient_item.entity";
-import { Measurement } from "@entities/measurement.entity";
 import { Recipe } from "@entities/recipe.entity";
 
-import IngredientValidator from "@validators/ingredient.validator";
 import IngredientItemValidator from "@validators/ingredient_item.validator";
-import MeasurementValidator from "@validators/measurement.validator";
 
 export class IngredientItemService {
   public async createMany(
     recipe: Recipe,
-    ingredientItemData: IngredientItemValidator[]
-  ): Promise<IngredientItem[]> {
-    const ingredientItems: IngredientItem[] = [];
-    for (const ingredientItemInput of ingredientItemData) {
+    ingredientItemsData: IngredientItemValidator[]
+  ) {
+    for (const ingredientItemData of ingredientItemsData) {
+      const { rank, header, ingredient: ingredientData } = ingredientItemData;
+
       const ingredientItem: IngredientItem = DI.ingredientItemRepository.create(
         {
-          rank: ingredientItemInput.rank,
-          header: ingredientItemInput.header,
+          rank,
+          header,
           recipe,
         }
       );
 
-      if (ingredientItemInput.ingredient) {
-        const ingredientData: IngredientValidator =
-          ingredientItemInput.ingredient;
+      if (ingredientData) {
+        const {
+          name,
+          measurement,
+          convertedMeasurement,
+          hasAlternativeIngredients,
+          hasAddedMeasurements,
+          additional,
+        } = ingredientData;
+
         const ingredient: Ingredient = DI.ingredientRepository.create({
-          name: ingredientData.name,
-          hasAlternativeIngredients: ingredientData.hasAlternativeIngredients,
-          hasAddedMeasurements: ingredientData.hasAddedMeasurements,
-          additional: ingredientData.additional,
+          name,
+          measurement,
+          convertedMeasurement,
+          hasAlternativeIngredients,
+          hasAddedMeasurements,
+          additional,
           ingredientItem,
         });
-
-        if (ingredientData.measurements) {
-          const measurementData: MeasurementValidator[] =
-            ingredientData.measurements;
-          for (const measurementInput of measurementData) {
-            const measurement: Measurement = DI.measurementRepostiory.create({
-              ...measurementInput,
-              ingredient,
-            });
-
-            await DI.em.persistAndFlush(measurement);
-          }
-        }
 
         await DI.em.persistAndFlush(ingredient);
       }
 
       await DI.em.persistAndFlush(ingredientItem);
-
-      ingredientItems.push(ingredientItem);
     }
-
-    return ingredientItems;
   }
 }

@@ -20,7 +20,6 @@ import { Ingredient } from "@entities/ingredient.entity";
 import { IngredientItem } from "@entities/ingredient_item.entity";
 import { Instruction } from "@entities/instruction.entity";
 import { InstructionItem } from "@entities/instruction_item.entity";
-import { Measurement } from "@entities/measurement.entity";
 import { Recipe } from "@entities/recipe.entity";
 import { User } from "@entities/user.entity";
 
@@ -68,7 +67,6 @@ export class App {
       DI.instructionRepository = DI.em.getRepository(Instruction);
       DI.ingredientItemRepository = DI.em.getRepository(IngredientItem);
       DI.ingredientRepository = DI.em.getRepository(Ingredient);
-      DI.measurementRepostiory = DI.em.getRepository(Measurement);
     } catch (error) {
       console.log(error);
     } finally {

@@ -516,6 +516,24 @@
           "nullable": false,
           "mappedType": "array"
         },
+        "measurement": {
+          "name": "measurement",
+          "type": "text[]",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "array"
+        },
+        "converted_measurement": {
+          "name": "converted_measurement",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "json"
+        },
         "has_alternative_ingredients": {
           "name": "has_alternative_ingredients",
           "type": "boolean",
@@ -587,120 +605,6 @@
             "id"
           ],
           "referencedTableName": "public.ingredient_items",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "uuid"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "date",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "date"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "date",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "date"
-        },
-        "quantity": {
-          "name": "quantity",
-          "type": "text[]",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "array"
-        },
-        "unit": {
-          "name": "unit",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
-        },
-        "unit_plural": {
-          "name": "unit_plural",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
-        },
-        "is_range": {
-          "name": "is_range",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "is_converted": {
-          "name": "is_converted",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "ingredient_id": {
-          "name": "ingredient_id",
-          "type": "uuid",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "uuid"
-        }
-      },
-      "name": "measurements",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "measurements_pkey",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "measurements_ingredient_id_foreign": {
-          "constraintName": "measurements_ingredient_id_foreign",
-          "columnNames": [
-            "ingredient_id"
-          ],
-          "localTableName": "public.measurements",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.ingredients",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         }
