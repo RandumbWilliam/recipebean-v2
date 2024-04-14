@@ -52,9 +52,10 @@ export type IngredientItemValidator = {
 
 export type IngredientValidator = {
   additional?: InputMaybe<Scalars['String']['input']>;
+  convertedMeasurement?: InputMaybe<MeasurementValidator>;
   hasAddedMeasurements: Scalars['Boolean']['input'];
   hasAlternativeIngredients: Scalars['Boolean']['input'];
-  measurements?: InputMaybe<Array<MeasurementValidator>>;
+  measurement?: InputMaybe<Array<MeasurementValidator>>;
   name: Array<Scalars['String']['input']>;
 };
 
@@ -69,7 +70,6 @@ export type InstructionValidator = {
 };
 
 export type MeasurementValidator = {
-  isConverted: Scalars['Boolean']['input'];
   isRange: Scalars['Boolean']['input'];
   quantity?: InputMaybe<Array<Scalars['Float']['input']>>;
   unit?: InputMaybe<Scalars['String']['input']>;

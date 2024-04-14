@@ -1,0 +1,5 @@
+mutation CreateRecipe($cookbookIds: [String!]!, $recipeData: RecipeValidator!) {
+  createRecipe(cookbookIds: $cookbookIds, recipeData: $recipeData) {
+    id
+  }
+}

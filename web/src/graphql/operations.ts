@@ -47,6 +47,14 @@ export type CreateCookbookMutationVariables = Types.Exact<{
 
 export type CreateCookbookMutation = { __typename?: 'Mutation', createCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
 
+export type CreateRecipeMutationVariables = Types.Exact<{
+  cookbookIds: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
+  recipeData: Types.RecipeValidator;
+}>;
+
+
+export type CreateRecipeMutation = { __typename?: 'Mutation', createRecipe: { __typename?: 'Recipe', id: string } };
+
 export const CookbookResponseFragmentDoc = gql`
     fragment CookbookResponse on Cookbook {
   id
@@ -118,6 +126,13 @@ export const CreateCookbookDocument = gql`
     id
     name
     coverId
+  }
+}
+    `;
+export const CreateRecipeDocument = gql`
+    mutation CreateRecipe($cookbookIds: [String!]!, $recipeData: RecipeValidator!) {
+  createRecipe(cookbookIds: $cookbookIds, recipeData: $recipeData) {
+    id
   }
 }
     `;
