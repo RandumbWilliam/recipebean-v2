@@ -26,3 +26,7 @@ export function useGetCookbookQuery(options: Omit<Urql.UseQueryArgs<Operations.G
 export function useCreateCookbookMutation() {
   return Urql.useMutation<Operations.CreateCookbookMutation, Operations.CreateCookbookMutationVariables>(Operations.CreateCookbookDocument);
 };
+
+export function useCreateRecipeMutation() {
+  return Urql.useMutation<Operations.CreateRecipeMutation, Operations.CreateRecipeMutationVariables>(Operations.CreateRecipeDocument);
+};
