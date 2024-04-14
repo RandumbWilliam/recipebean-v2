@@ -21,10 +21,6 @@ class MeasurementValidator {
   @Field()
   @IsBoolean()
   public isRange: boolean;
-
-  @Field()
-  @IsBoolean()
-  public isConverted: boolean;
 }
 
 export default MeasurementValidator;
