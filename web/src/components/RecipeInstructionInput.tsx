@@ -1,23 +1,17 @@
-import { useState } from "react";
+import { RecipeContext } from "@/context/recipe.context";
+import { useContext, useState } from "react";
 import { TextField } from "react-aria-components";
 import { IconPlus } from "./icons";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
-
-interface RecipeInstructionInput {
-  instructionItems: any[];
-  submitCallback: (ingredientItem: any) => void;
-}
 
 const initialInstructionItem = {
   header: "",
   instruction: "",
 };
 
-const RecipeInstructionInput: React.FC<RecipeInstructionInput> = ({
-  instructionItems,
-  submitCallback,
-}) => {
+const RecipeInstructionInput = () => {
+  const { recipeData, setRecipeData } = useContext(RecipeContext);
   const [instructionItem, setInstructionItem] = useState(
     initialInstructionItem
   );
@@ -29,7 +23,10 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInput> = ({
   };
 
   const submitInstructionItem = async () => {
-    submitCallback(instructionItem);
+    setRecipeData((prevRecipeData) => ({
+      ...prevRecipeData,
+      instructionItems: [...prevRecipeData.instructionItems, instructionItem],
+    }));
     setInstructionItem(initialInstructionItem);
     setShowInstructionHeader(false);
   };
@@ -38,9 +35,9 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInput> = ({
     <TextField>
       <Label>Instructions</Label>
       <div className="flex flex-col gap-1.5">
-        {instructionItems.length > 0 && (
+        {recipeData.instructionItems.length > 0 && (
           <ul className="flex flex-col gap-1.5 list-disc list-outside">
-            {instructionItems.map((item, index) => {
+            {recipeData.instructionItems.map((item, index) => {
               if (item.header) {
                 return (
                   <b key={index} className="ml-4">
