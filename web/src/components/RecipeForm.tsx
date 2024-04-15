@@ -1,6 +1,7 @@
+import { RecipeContext } from "@/context/recipe.context";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import type { FileDropItem } from "react-aria";
 import { DropZone, FileTrigger, TextField } from "react-aria-components";
 import RecipeIngredientInput from "./RecipeIngredientInput";
@@ -11,26 +12,13 @@ import { Label } from "./ui/Label";
 
 interface RecipeFormProps {
   className?: string;
-  initialRecipeData: {
-    name: string;
-    servings: string;
-    prepTime: string;
-    cookTime: string;
-    imageUrl: string;
-    imageId: string;
-    ingredientItems: any[];
-    instructionItems: any[];
-  };
 }
 
-const RecipeForm: React.FC<RecipeFormProps> = ({
-  className,
-  initialRecipeData,
-}) => {
+const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [recipeData, setRecipeData] = useState(initialRecipeData);
+  const { recipeData, setRecipeData } = useContext(RecipeContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -65,21 +53,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
     setImageFile(null);
     URL.revokeObjectURL(recipeData.imageUrl);
     setRecipeData({ ...recipeData, imageUrl: "" });
-  };
-
-  const handleIngredientCallback = (ingredientItem: any) => {
-    console.log(ingredientItem);
-    setRecipeData((prevState) => ({
-      ...prevState,
-      ingredientItems: [...prevState.ingredientItems, ingredientItem],
-    }));
-  };
-
-  const handleInstructionCallback = (instructionItem: any) => {
-    setRecipeData((prevState) => ({
-      ...prevState,
-      instructionItems: [...prevState.instructionItems, instructionItem],
-    }));
   };
 
   return (
@@ -162,14 +135,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({
           )}
         </div>
       </div>
-      <RecipeIngredientInput
-        ingredientItems={recipeData.ingredientItems}
-        submitCallback={handleIngredientCallback}
-      />
-      <RecipeInstructionInput
-        instructionItems={recipeData.instructionItems}
-        submitCallback={handleInstructionCallback}
-      />
+      <RecipeIngredientInput />
+      <RecipeInstructionInput />
       <TextField>
         <Label>Servings</Label>
         <Input

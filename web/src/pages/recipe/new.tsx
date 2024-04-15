@@ -1,19 +1,9 @@
 import RecipeForm from "@/components/RecipeForm";
 import { Button } from "@/components/ui/Button";
+import RecipeContextProvider from "@/context/recipe.context";
 import DashboardLayout from "@/layouts/dashboard";
 import { urqlClient } from "@/utils/urqlClient";
 import { withUrqlClient } from "next-urql";
-
-const initialRecipeData = {
-  name: "",
-  servings: "",
-  prepTime: "",
-  cookTime: "",
-  imageUrl: "",
-  imageId: "",
-  ingredientItems: [],
-  instructionItems: [],
-};
 
 const CreateRecipe = () => {
   return (
@@ -26,10 +16,9 @@ const CreateRecipe = () => {
           </Button>
         </div>
         <div className="flex justify-center">
-          <RecipeForm
-            initialRecipeData={initialRecipeData}
-            className="w-full max-w-xl gap-6"
-          />
+          <RecipeContextProvider>
+            <RecipeForm className="w-full max-w-xl gap-6" />
+          </RecipeContextProvider>
         </div>
       </div>
     </DashboardLayout>
