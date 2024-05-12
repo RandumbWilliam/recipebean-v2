@@ -5,8 +5,10 @@ import { useRouter } from "next/router";
 
 import RecipeCard from "@/components/RecipeCard";
 import { IconBookAdd } from "@/components/icons";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import DashboardLayout from "@/layouts/dashboard";
+import { cn } from "@/utils/cn";
+import Link from "next/link";
 
 const Cookbook = () => {
   const router = useRouter();
@@ -32,7 +34,9 @@ const Cookbook = () => {
         <div className="flex flex-col items-center justify-center h-[500px] rounded-2xl bg-gray-100">
           <h3>No Recipes</h3>
 
-          <Button type="button">Add Recipe</Button>
+          <Link href="/recipe/new" className={cn(buttonVariants())}>
+            Add Recipe
+          </Link>
         </div>
       );
     }
@@ -67,9 +71,9 @@ const Cookbook = () => {
         <div className="flex flex-col gap-3 mb-6">
           <div className="flex justify-between">
             <h1 className="h2-bold">{data?.getCookbook.name}</h1>
-            <Button type="button" className="hidden md:block">
+            <Link href="/recipe/new" className={cn(buttonVariants())}>
               Add Recipe
-            </Button>
+            </Link>
           </div>
           {data?.getCookbook && (
             <p className="ml-2 text-gray-400">

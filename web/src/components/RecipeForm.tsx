@@ -1,11 +1,21 @@
-import { RecipeContext } from "@/context/recipe.context";
+import { ingredientLabel, ingredientParser } from "@/helpers/ingredient.js";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { FileDropItem } from "react-aria";
+
+import {
+  IngredientItemValidator,
+  InstructionItemValidator,
+  RecipeValidator,
+} from "@/graphql/types";
 import { DropZone, FileTrigger, TextField } from "react-aria-components";
-import RecipeIngredientInput from "./RecipeIngredientInput";
-import RecipeInstructionInput from "./RecipeInstructionInput";
+import RecipeIngredientInput, {
+  type IngredientItem,
+} from "./RecipeIngredientInput";
+import RecipeInstructionInput, {
+  type InstructionItem,
+} from "./RecipeInstructionInput";
 import { IconTrash } from "./icons";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
@@ -14,11 +24,25 @@ interface RecipeFormProps {
   className?: string;
 }
 
+const initialRecipeData = {
+  name: "",
+  servings: 0,
+  prepTime: 0,
+  cookTime: 0,
+  imageUrl: "",
+  imageId: "",
+  ingredientItems: [],
+  instructionItems: [],
+};
+
 const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const { recipeData, setRecipeData } = useContext(RecipeContext);
+  const [recipeData, setRecipeData] =
+    useState<RecipeValidator>(initialRecipeData);
+  const [ingredientItemRank, setIngredientItemRank] = useState(0);
+  const [instructionItemRank, setInstructionItemRank] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -55,6 +79,46 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
     setRecipeData({ ...recipeData, imageUrl: "" });
   };
 
+  const addIngredient = (ingredientItem: IngredientItem) => {
+    const ingredient = {
+      rank: ingredientItemRank,
+    } as IngredientItemValidator;
+
+    if (ingredientItem.header) {
+      ingredient.header = ingredientItem.header;
+    }
+
+    if (ingredientItem.ingredient) {
+      ingredient.ingredient = ingredientParser(ingredientItem.ingredient);
+    }
+
+    setIngredientItemRank(ingredientItemRank + 1);
+    setRecipeData((prevState) => ({
+      ...prevState,
+      ingredientItems: [...prevState.ingredientItems, ingredient],
+    }));
+  };
+
+  const addInstruction = (instructionItem: InstructionItem) => {
+    const instruction = {
+      rank: instructionItemRank,
+    } as InstructionItemValidator;
+
+    if (instructionItem.header) {
+      instruction.header = instructionItem.header;
+    }
+
+    if (instructionItem.instruction) {
+      instruction.instruction = { text: instructionItem.instruction };
+    }
+
+    setInstructionItemRank(instructionItemRank + 1);
+    setRecipeData((prevState) => ({
+      ...prevState,
+      instructionItems: [...prevState.instructionItems, instruction],
+    }));
+  };
+
   return (
     <form className={cn("flex flex-col", className)}>
       <TextField>
@@ -63,6 +127,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
           type="text"
           name="name"
           placeholder='e.g. "White Bean Soup"'
+          value={recipeData.name}
           onChange={handleChange}
         />
       </TextField>
@@ -135,14 +200,59 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
           )}
         </div>
       </div>
-      <RecipeIngredientInput />
-      <RecipeInstructionInput />
+      <TextField>
+        <Label>Ingredients</Label>
+        {recipeData.ingredientItems.length > 0 && (
+          <ul className="flex flex-col gap-1.5 list-disc list-outside">
+            {recipeData.ingredientItems.map((item, index) => {
+              if (item.header) {
+                return (
+                  <b key={index} className="ml-4">
+                    {item.header}
+                  </b>
+                );
+              } else {
+                return (
+                  <li key={index} className="ml-8">
+                    {ingredientLabel(item.ingredient)}
+                  </li>
+                );
+              }
+            })}
+          </ul>
+        )}
+        <RecipeIngredientInput handleIngredientInput={addIngredient} />
+      </TextField>
+      <TextField>
+        {recipeData.instructionItems.length > 0 && (
+          <ul className="flex flex-col gap-1.5 list-disc list-outside">
+            {recipeData.instructionItems.map((item, index) => {
+              if (item.header) {
+                return (
+                  <b key={index} className="ml-4">
+                    {item.header}
+                  </b>
+                );
+              }
+              if (item.instruction) {
+                return (
+                  <li key={index} className="ml-8">
+                    {item.instruction.text}
+                  </li>
+                );
+              }
+            })}
+          </ul>
+        )}
+        <RecipeInstructionInput handleInstructionInput={addInstruction} />
+      </TextField>
       <TextField>
         <Label>Servings</Label>
         <Input
           type="text"
           name="name"
           placeholder="#"
+          value={recipeData.servings}
           onChange={handleChange}
         />
       </TextField>
@@ -152,6 +262,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
           type="text"
           name="prepTime"
           placeholder="Minutes"
+          value={recipeData.prepTime}
           onChange={handleChange}
         />
       </TextField>
@@ -161,6 +272,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
           type="text"
           name="cookTime"
           placeholder="Minutes"
+          value={recipeData.cookTime}
           onChange={handleChange}
         />
       </TextField>
