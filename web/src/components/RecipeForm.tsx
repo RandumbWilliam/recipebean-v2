@@ -224,6 +224,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
         <RecipeIngredientInput handleIngredientInput={addIngredient} />
       </TextField>
       <TextField>
+        <Label>Instructions</Label>
         {recipeData.instructionItems.length > 0 && (
           <ul className="flex flex-col gap-1.5 list-disc list-outside">
             {recipeData.instructionItems.map((item, index) => {
