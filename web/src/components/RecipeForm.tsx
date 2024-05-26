@@ -14,7 +14,6 @@ import {
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/Button";
 import { DropZone, FileTrigger, TextField } from "react-aria-components";
 import RecipeIngredientInput, {
   type IngredientItem,
@@ -23,6 +22,7 @@ import RecipeInstructionInput, {
   type InstructionItem,
 } from "./RecipeInstructionInput";
 import { IconMenu, IconTrash, IconX } from "./icons";
+import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 
