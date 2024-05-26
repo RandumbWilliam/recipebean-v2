@@ -1,5 +1,4 @@
 import {
-  Cascade,
   Collection,
   Entity,
   ManyToMany,
@@ -23,25 +22,21 @@ export class Recipe extends Base<Recipe> {
   @Property({ type: types.string })
   public name!: string;
 
-  @Field()
-  @Property({ type: types.integer })
-  public servings!: number;
+  @Field({ nullable: true })
+  @Property({ type: types.integer, nullable: true })
+  public servings?: number;
 
-  @Field()
-  @Property({ type: types.integer })
-  public prepTime!: number;
+  @Field({ nullable: true })
+  @Property({ type: types.integer, nullable: true })
+  public prepTime?: number;
 
-  @Field()
-  @Property({ type: types.integer })
-  public cookTime!: number;
+  @Field({ nullable: true })
+  @Property({ type: types.integer, nullable: true })
+  public cookTime?: number;
 
-  @Field()
-  @Property({ type: types.string })
-  public imageUrl!: string;
-
-  @Field()
-  @Property({ type: types.string })
-  public imageId!: string;
+  @Field({ nullable: true })
+  @Property({ type: types.string, nullable: true })
+  public imageUrl?: string;
 
   @OneToMany(() => IngredientItem, (ingredientItem) => ingredientItem.recipe)
   public ingredientItems = new Collection<IngredientItem>(this);

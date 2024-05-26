@@ -139,7 +139,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "integer"
         },
         "prep_time": {
@@ -148,7 +148,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "integer"
         },
         "cook_time": {
@@ -157,7 +157,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "integer"
         },
         "image_url": {
@@ -166,16 +166,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "image_id": {
-          "name": "image_id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "string"
         },
         "user_id": {

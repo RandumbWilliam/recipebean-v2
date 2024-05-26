@@ -1,12 +1,12 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20240414225014 extends Migration {
+export class Migration20240526210724 extends Migration {
 
   async up(): Promise<void> {
     this.addSql('create table "users" ("id" uuid not null, "created_at" date not null, "updated_at" date not null, "email" varchar(255) not null, "password" varchar(255) not null, "full_name" varchar(255) not null, "avatar_id" smallint not null, constraint "users_pkey" primary key ("id"));');
     this.addSql('alter table "users" add constraint "users_email_unique" unique ("email");');
 
-    this.addSql('create table "recipes" ("id" uuid not null, "created_at" date not null, "updated_at" date not null, "name" varchar(255) not null, "servings" int not null, "prep_time" int not null, "cook_time" int not null, "image_url" varchar(255) not null, "image_id" varchar(255) not null, "user_id" uuid not null, constraint "recipes_pkey" primary key ("id"));');
+    this.addSql('create table "recipes" ("id" uuid not null, "created_at" date not null, "updated_at" date not null, "name" varchar(255) not null, "servings" int null, "prep_time" int null, "cook_time" int null, "image_url" varchar(255) null, "user_id" uuid not null, constraint "recipes_pkey" primary key ("id"));');
 
     this.addSql('create table "instruction_items" ("id" uuid not null, "created_at" date not null, "updated_at" date not null, "rank" int not null, "header" varchar(255) null, "recipe_id" uuid not null, constraint "instruction_items_pkey" primary key ("id"));');
 

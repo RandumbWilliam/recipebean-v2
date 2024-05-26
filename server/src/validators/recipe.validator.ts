@@ -1,4 +1,4 @@
-import { IsArray, IsInt, IsString } from "class-validator";
+import { IsArray, IsInt, IsOptional, IsString } from "class-validator";
 import { Field, InputType } from "type-graphql";
 import IngredientItemValidator from "./ingredient_item.validator";
 import InstructionItemValidator from "./instruction_item.validator";
@@ -9,33 +9,35 @@ class RecipeValidator {
   @IsString()
   public name: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsInt()
-  public servings: number;
+  @IsOptional()
+  public servings?: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsInt()
-  public prepTime: number;
+  @IsOptional()
+  public prepTime?: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsInt()
-  public cookTime: number;
+  @IsOptional()
+  public cookTime?: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
-  public imageUrl: string;
+  @IsOptional()
+  public imageUrl?: string;
 
-  @Field()
-  @IsString()
-  public imageId: string;
-
-  @Field(() => [IngredientItemValidator])
+  @Field(() => [IngredientItemValidator], { nullable: true })
   @IsArray()
-  public ingredientItems: IngredientItemValidator[];
+  @IsOptional()
+  public ingredientItems?: IngredientItemValidator[];
 
-  @Field(() => [InstructionItemValidator])
+  @Field(() => [InstructionItemValidator], { nullable: true })
   @IsArray()
-  public instructionItems: InstructionItemValidator[];
+  @IsOptional()
+  public instructionItems?: InstructionItemValidator[];
 }
 
 export default RecipeValidator;

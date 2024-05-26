@@ -1,9 +1,7 @@
 import DI from "@database/index";
-import { Cookbook } from "@entities/cookbook.entity";
 import { Recipe } from "@entities/recipe.entity";
 import { User } from "@entities/user.entity";
 import { HttpException } from "@exceptions/httpException";
-import CookbookValidator from "@validators/cookbook.validator";
 import RecipeValidator from "@validators/recipe.validator";
 
 export class RecipeService {
@@ -31,7 +29,6 @@ export class RecipeService {
       prepTime: recipeData.prepTime,
       cookTime: recipeData.cookTime,
       imageUrl: recipeData.imageUrl,
-      imageId: recipeData.imageId,
       user,
     });
 

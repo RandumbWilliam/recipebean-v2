@@ -15,7 +15,7 @@ export default {
   entitiesTs: ["src/entities/*.entity.ts"],
   migrations: {
     tableName: "migrations",
-    pathTs: "src/migrations",
-    path: "dist/migrations",
+    pathTs: "src/database/migrations",
+    path: "dist/database/migrations",
   },
 } as Options;

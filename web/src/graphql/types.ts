@@ -174,26 +174,24 @@ export type QueryGetCookbookArgs = {
 
 export type Recipe = Base & {
   __typename?: 'Recipe';
-  cookTime: Scalars['Float']['output'];
+  cookTime?: Maybe<Scalars['Float']['output']>;
   createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
-  imageId: Scalars['String']['output'];
-  imageUrl: Scalars['String']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
-  prepTime: Scalars['Float']['output'];
-  servings: Scalars['Float']['output'];
+  prepTime?: Maybe<Scalars['Float']['output']>;
+  servings?: Maybe<Scalars['Float']['output']>;
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export type RecipeValidator = {
-  cookTime: Scalars['Float']['input'];
-  imageId: Scalars['String']['input'];
-  imageUrl: Scalars['String']['input'];
-  ingredientItems: Array<IngredientItemValidator>;
-  instructionItems: Array<InstructionItemValidator>;
+  cookTime?: InputMaybe<Scalars['Float']['input']>;
+  imageUrl?: InputMaybe<Scalars['String']['input']>;
+  ingredientItems?: InputMaybe<Array<IngredientItemValidator>>;
+  instructionItems?: InputMaybe<Array<InstructionItemValidator>>;
   name: Scalars['String']['input'];
-  prepTime: Scalars['Float']['input'];
-  servings: Scalars['Float']['input'];
+  prepTime?: InputMaybe<Scalars['Float']['input']>;
+  servings?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type User = Base & {

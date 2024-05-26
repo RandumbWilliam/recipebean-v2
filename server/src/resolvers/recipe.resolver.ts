@@ -43,15 +43,19 @@ export class RecipeResolver {
       }
     }
 
-    await this.ingredientItemService.createMany(
-      recipe,
-      recipeData.ingredientItems
-    );
+    if (recipeData.ingredientItems) {
+      await this.ingredientItemService.createMany(
+        recipe,
+        recipeData.ingredientItems
+      );
+    }
 
-    await this.instructionItemService.createMany(
-      recipe,
-      recipeData.instructionItems
-    );
+    if (recipeData.instructionItems) {
+      await this.instructionItemService.createMany(
+        recipe,
+        recipeData.instructionItems
+      );
+    }
 
     return recipe;
   }
