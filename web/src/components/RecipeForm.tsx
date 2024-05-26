@@ -224,7 +224,9 @@ type IngredientData = z.infer<typeof ingredientValidationSchmea>;
 type InstructionData = z.infer<typeof instructionValidationSchema>;
 
 const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
-  const [{ data, fetching }] = useGetUserCookbooksQuery();
+  const [{ data, fetching }] = useGetUserCookbooksQuery({
+    requestPolicy: "network-only",
+  });
   const [, createRecipe] = useCreateRecipeMutation();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
