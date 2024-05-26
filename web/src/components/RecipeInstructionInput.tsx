@@ -29,6 +29,14 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
     setInstructionItem({ ...instructionItem, [e.target.name]: e.target.value });
   };
 
+  const submitInstructionHeader = () => {
+    if (instructionItem.header === "") {
+      setShowInstructionHeader(false);
+    } else {
+      submitInstructionItem();
+    }
+  };
+
   const submitInstructionItem = async () => {
     handleInstructionInput(instructionItem);
 
@@ -46,6 +54,11 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
             placeholder="Add a header"
             value={instructionItem.header}
             onChange={handleIngredient}
+            onBlur={submitInstructionHeader}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === "Enter") submitInstructionHeader();
+            }}
           />
           <button
             type="button"
@@ -63,6 +76,9 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
           placeholder="Add a step"
           value={instructionItem.instruction}
           onChange={handleIngredient}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") submitInstructionItem();
+          }}
         />
         <button
           type="button"

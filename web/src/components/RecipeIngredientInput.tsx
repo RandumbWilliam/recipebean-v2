@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { IconPlus } from "./icons";
+import { TextField } from "react-aria-components";
+import { IconPlus, IconX } from "./icons";
 import { Input } from "./ui/Input";
 
 export interface IngredientItem {
@@ -29,7 +30,15 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
     setIngredientItem({ ...ingredientItem, [e.target.name]: e.target.value });
   };
 
-  const submitIngredientItem = async () => {
+  const submitIngredientHeader = () => {
+    if (ingredientItem.header === "") {
+      setShowIngredientHeader(false);
+    } else {
+      submitIngredientItem();
+    }
+  };
+
+  const submitIngredientItem = () => {
     handleIngredientInput(ingredientItem);
 
     setIngredientItem(initialIngredientItem);
@@ -39,22 +48,26 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
   return (
     <div className="flex flex-col gap-1.5">
       {showIngredientHeader && (
-        <div className="flex gap-1.5">
+        <TextField className="relative w-full mb-3" aria-label="ingredient">
           <Input
-            type="text"
+            className="pr-8"
             name="header"
-            placeholder="Add a header"
             value={ingredientItem.header}
             onChange={handleIngredient}
+            onBlur={submitIngredientHeader}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === "Enter") submitIngredientHeader();
+            }}
           />
           <button
             type="button"
-            className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-brink-pink-500 rounded-md"
-            onClick={submitIngredientItem}
+            onMouseDown={() => setShowIngredientHeader(false)}
+            className="absolute right-1 top-2.5"
           >
-            <IconPlus className="fill-white" />
+            <IconX />
           </button>
-        </div>
+        </TextField>
       )}
       <div className="flex gap-1.5">
         <Input
@@ -63,6 +76,9 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
           placeholder="Add a ingredient"
           value={ingredientItem.ingredient}
           onChange={handleIngredient}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") submitIngredientItem();
+          }}
         />
         <button
           type="button"

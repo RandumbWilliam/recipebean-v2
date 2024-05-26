@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@graphql-codegen/import-types-preset": "^3.0.0",
+    "@hookform/resolvers": "^3.3.4",
     "@urql/exchange-graphcache": "^6.4.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -21,10 +22,13 @@
     "react": "^18",
     "react-aria": "^3.32.1",
     "react-aria-components": "^1.1.1",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18",
+    "react-hook-form": "^7.51.4",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-react-aria-components": "^1.1.1",
-    "urql": "^4.0.6"
+    "urql": "^4.0.6",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",
@@ -33,6 +37,7 @@
     "@graphql-codegen/typescript-urql": "^4.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
