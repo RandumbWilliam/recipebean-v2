@@ -204,8 +204,6 @@ const validationSchema = z.object({
   imageId: z.string().optional(),
   ingredientItems: z.array(ingredientValidationSchmea).optional().default([]),
   instructionItems: z.array(instructionValidationSchema).optional().default([]),
-  // ingredientItems: z.array(z.object({ ingredient: z.string().min(1) })),
-  // instructionItems: z.array(instructionValidationSchema).optional().default([]),
 });
 
 type RecipeData = z.infer<typeof validationSchema>;
