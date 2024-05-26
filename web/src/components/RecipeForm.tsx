@@ -217,9 +217,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
 
   const [reorderIngredient, setReorderIngredient] = useState(false);
   const [reorderInstruction, setReorderInstruction] = useState(false);
-  const [editIngredientIndex, setEditIngredientIndex] = useState<Number | null>(
-    null
-  );
 
   const {
     register,
