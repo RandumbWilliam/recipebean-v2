@@ -14,10 +14,8 @@ import {
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  useCreateRecipeMutation,
-  useGetUserCookbooksQuery,
-} from "@/graphql/hooks";
+import { useGetUserCookbooksQuery } from "@/graphql/hooks";
+import { RecipeValidator } from "@/graphql/types";
 import {
   CheckboxGroup,
   DropZone,
@@ -140,6 +138,7 @@ function EditableField({
 
 interface RecipeFormProps {
   className?: string;
+  onSave: (cookbookIds: string[], recipeData: RecipeValidator) => void;
 }
 
 const ingredientValidationSchmea = z.object({
@@ -223,11 +222,10 @@ type RecipeData = z.infer<typeof validationSchema>;
 type IngredientData = z.infer<typeof ingredientValidationSchmea>;
 type InstructionData = z.infer<typeof instructionValidationSchema>;
 
-const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
+const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
   const [{ data, fetching }] = useGetUserCookbooksQuery({
     requestPolicy: "network-only",
   });
-  const [, createRecipe] = useCreateRecipeMutation();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -271,7 +269,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
     return value.replace(/[^0-9]/g, "");
   };
 
-  const onSubmit = async (data: RecipeData) => {
+  const onSubmit = (data: RecipeData) => {
     const ingredientItems = data.ingredientItems.map((item, index) => ({
       ...item,
       rank: index,
@@ -294,11 +292,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className }) => {
 
     const cookbookIds = data.cookbooks;
 
-    const result = await createRecipe({ cookbookIds, recipeData });
-
-    if (result.data?.createRecipe) {
-      console.log(result.data.createRecipe);
-    }
+    onSave(cookbookIds, recipeData);
   };
 
   // const MAX_FILE_SIZE = 6 * 1024 * 1024; // 6 MB
