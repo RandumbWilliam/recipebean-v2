@@ -1,5 +1,0 @@
-fragment CookbookResponse on Cookbook {
-  id
-  name
-  coverId
-}

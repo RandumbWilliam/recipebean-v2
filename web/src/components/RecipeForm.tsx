@@ -14,15 +14,8 @@ import {
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useGetUserCookbooksQuery } from "@/graphql/hooks";
 import { RecipeValidator } from "@/graphql/types";
-import {
-  CheckboxGroup,
-  DropZone,
-  FileTrigger,
-  Popover,
-  TextField,
-} from "react-aria-components";
+import { DropZone, FileTrigger, TextField } from "react-aria-components";
 import RecipeIngredientInput, {
   type IngredientItem,
 } from "./RecipeIngredientInput";
@@ -31,7 +24,6 @@ import RecipeInstructionInput, {
 } from "./RecipeInstructionInput";
 import { IconMenu, IconTrash, IconX } from "./icons";
 import { Button } from "./ui/Button";
-import { Checkbox } from "./ui/Checkbox";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 
@@ -138,7 +130,7 @@ function EditableField({
 
 interface RecipeFormProps {
   className?: string;
-  onSave: (cookbookIds: string[], recipeData: RecipeValidator) => void;
+  onSave: (recipeData: RecipeValidator) => void;
 }
 
 const ingredientValidationSchmea = z.object({
@@ -212,10 +204,8 @@ const validationSchema = z.object({
     })
     .pipe(z.number().int().nonnegative().finite().optional().default(0)),
   imageUrl: z.string().optional(),
-  imageId: z.string().optional(),
   ingredientItems: z.array(ingredientValidationSchmea).optional().default([]),
   instructionItems: z.array(instructionValidationSchema).optional().default([]),
-  cookbooks: z.array(z.string()).min(1),
 });
 
 type RecipeData = z.infer<typeof validationSchema>;
@@ -223,10 +213,6 @@ type IngredientData = z.infer<typeof ingredientValidationSchmea>;
 type InstructionData = z.infer<typeof instructionValidationSchema>;
 
 const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
-  const [{ data, fetching }] = useGetUserCookbooksQuery({
-    requestPolicy: "network-only",
-  });
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [reorderIngredient, setReorderIngredient] = useState(false);
@@ -285,14 +271,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
       servings: data.servings,
       prepTime: data.prepTime,
       cookTime: data.cookTime,
-      imageUrl: data.imageUrl,
+      imageUrl: data.imageUrl || null,
       ingredientItems,
       instructionItems,
     };
 
-    const cookbookIds = data.cookbooks;
-
-    onSave(cookbookIds, recipeData);
+    onSave(recipeData);
   };
 
   // const MAX_FILE_SIZE = 6 * 1024 * 1024; // 6 MB
@@ -379,14 +363,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
       instrcutionItemMove(source.index, destination.index);
     }
   };
-
-  if (fetching) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data?.getUserCookbooks) {
-    return <div>Error</div>;
-  }
 
   return (
     <form
@@ -699,26 +675,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
               />
               <p>{error && error.message}</p>
             </TextField>
-          )}
-        />
-        <Controller
-          control={control}
-          name="cookbooks"
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <CheckboxGroup
-              value={value || []}
-              onChange={onChange}
-              className="flex flex-col"
-            >
-              <Label>
-                Cookbooks <p>{error && error.message}</p>
-              </Label>
-              {data.getUserCookbooks.map((cookbook, index) => (
-                <Checkbox key={`cookbook-${index}`} value={cookbook.id}>
-                  {cookbook.name}
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
           )}
         />
       </div>

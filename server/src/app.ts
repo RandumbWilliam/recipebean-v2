@@ -15,7 +15,6 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 
-import { Cookbook } from "@entities/cookbook.entity";
 import { Ingredient } from "@entities/ingredient.entity";
 import { IngredientItem } from "@entities/ingredient_item.entity";
 import { Instruction } from "@entities/instruction.entity";
@@ -61,7 +60,6 @@ export class App {
       DI.em = DI.orm.em.fork();
 
       DI.userRepository = DI.em.getRepository(User);
-      DI.cookbookRepository = DI.em.getRepository(Cookbook);
       DI.recipeRespository = DI.em.getRepository(Recipe);
       DI.instructionItemRepository = DI.em.getRepository(InstructionItem);
       DI.instructionRepository = DI.em.getRepository(Instruction);

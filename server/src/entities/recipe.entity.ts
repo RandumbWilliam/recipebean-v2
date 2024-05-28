@@ -1,7 +1,6 @@
 import {
   Collection,
   Entity,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   Property,
@@ -10,7 +9,6 @@ import {
 import RecipeValidator from "@validators/recipe.validator";
 import { Field, ObjectType } from "type-graphql";
 import { Base } from "./base.entity";
-import { Cookbook } from "./cookbook.entity";
 import { IngredientItem } from "./ingredient_item.entity";
 import { InstructionItem } from "./instruction_item.entity";
 import { User } from "./user.entity";
@@ -43,9 +41,6 @@ export class Recipe extends Base<Recipe> {
 
   @OneToMany(() => InstructionItem, (isntructionItem) => isntructionItem.recipe)
   public instructionItems = new Collection<InstructionItem>(this);
-
-  @ManyToMany(() => Cookbook, (cookbook) => cookbook.recipes)
-  public cookbooks = new Collection<Cookbook>(this);
 
   @ManyToOne(() => User)
   public user!: User;

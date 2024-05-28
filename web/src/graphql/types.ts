@@ -21,29 +21,6 @@ export type Base = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
-export type Cookbook = Base & {
-  __typename?: 'Cookbook';
-  coverId: CookbookCover;
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  recipes: Array<Recipe>;
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export enum CookbookCover {
-  Breakfast = 'Breakfast',
-  Dessert = 'Dessert',
-  Dinner = 'Dinner',
-  Lunch = 'Lunch',
-  Soup = 'Soup'
-}
-
-export type CookbookValidator = {
-  coverId: CookbookCover;
-  name: Scalars['String']['input'];
-};
-
 export type IngredientItemValidator = {
   header?: InputMaybe<Scalars['String']['input']>;
   ingredient?: InputMaybe<IngredientValidator>;
@@ -78,40 +55,26 @@ export type MeasurementValidator = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createCookbook: Cookbook;
   createRecipe: Recipe;
   delete: Scalars['Boolean']['output'];
-  deleteCookbook: Scalars['Boolean']['output'];
   deleteRecipe: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
   logout: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
   signin: User;
   signup: User;
-  updateCookbook: Cookbook;
   updatePassword: User;
   updateUser: User;
 };
 
 
-export type MutationCreateCookbookArgs = {
-  cookbookData: CookbookValidator;
-};
-
-
 export type MutationCreateRecipeArgs = {
-  cookbookIds: Array<Scalars['String']['input']>;
   recipeData: RecipeValidator;
 };
 
 
 export type MutationDeleteArgs = {
   password: Scalars['String']['input'];
-};
-
-
-export type MutationDeleteCookbookArgs = {
-  cookbookId: Scalars['String']['input'];
 };
 
 
@@ -143,12 +106,6 @@ export type MutationSignupArgs = {
 };
 
 
-export type MutationUpdateCookbookArgs = {
-  cookbookData: CookbookValidator;
-  cookbookId: Scalars['String']['input'];
-};
-
-
 export type MutationUpdatePasswordArgs = {
   confirmPassword: Scalars['String']['input'];
   newPassword: Scalars['String']['input'];
@@ -162,14 +119,8 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getCookbook: Cookbook;
-  getUserCookbooks: Array<Cookbook>;
+  getUserRecipes: Array<Recipe>;
   myUser: User;
-};
-
-
-export type QueryGetCookbookArgs = {
-  cookbookId: Scalars['String']['input'];
 };
 
 export type Recipe = Base & {

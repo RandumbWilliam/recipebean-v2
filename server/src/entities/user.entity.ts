@@ -15,7 +15,6 @@ import { UserAvatar } from "@enums/userAvatar.enum";
 import UserValidator from "@validators/user.validator";
 
 import { Base } from "./base.entity";
-import { Cookbook } from "./cookbook.entity";
 import { Recipe } from "./recipe.entity";
 
 registerEnumType(UserAvatar, {
@@ -41,13 +40,6 @@ export class User extends Base<User> {
   @Field(() => UserAvatar)
   @Enum({ items: () => UserAvatar })
   public avatarId!: UserAvatar;
-
-  @OneToMany({
-    entity: () => Cookbook,
-    mappedBy: "user",
-    cascade: [Cascade.ALL],
-  })
-  public cookbooks = new Collection<Cookbook>(this);
 
   @OneToMany({ entity: () => Recipe, mappedBy: "user", cascade: [Cascade.ALL] })
   public recipes = new Collection<Recipe>(this);

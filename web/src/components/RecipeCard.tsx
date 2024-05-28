@@ -1,3 +1,4 @@
+import DefaultRecipeBanner from "@/assets/default-recipe-banner.jpg";
 import { RecipeResponseFragment } from "@/graphql/operations";
 import Image from "next/image";
 import React, { useMemo } from "react";
@@ -23,7 +24,7 @@ function convertMinutesToHoursAndMinutes(minutes: number) {
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ className, recipe }) => {
   const totalTime = useMemo(() => {
-    const totalMinutes = recipe.cookTime + recipe.prepTime;
+    const totalMinutes = (recipe.cookTime ?? 0) + (recipe.prepTime ?? 0);
     return convertMinutesToHoursAndMinutes(totalMinutes);
   }, [recipe.cookTime, recipe.prepTime]);
 
@@ -31,7 +32,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ className, recipe }) => {
     <div>
       <div className="relative w-full h-48 rounded-2xl overflow-hidden">
         <Image
-          src={recipe.imageUrl}
+          src={recipe.imageUrl ?? DefaultRecipeBanner.src}
           alt="cookbook-cover"
           fill={true}
           className="object-cover"

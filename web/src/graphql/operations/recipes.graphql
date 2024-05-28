@@ -1,5 +1,11 @@
-mutation CreateRecipe($cookbookIds: [String!]!, $recipeData: RecipeValidator!) {
-  createRecipe(cookbookIds: $cookbookIds, recipeData: $recipeData) {
+query GetUserRecipes {
+  getUserRecipes {
+    ...RecipeResponse
+  }
+}
+
+mutation CreateRecipe($recipeData: RecipeValidator!) {
+  createRecipe(recipeData: $recipeData) {
     id
   }
 }

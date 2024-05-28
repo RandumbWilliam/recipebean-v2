@@ -2,8 +2,6 @@ import * as Types from './types';
 
 import gql from 'graphql-tag';
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export type CookbookResponseFragment = { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover };
-
 export type RecipeResponseFragment = { __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null };
 
 export type UserResponseFragment = { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar };
@@ -28,40 +26,18 @@ export type SignInMutationVariables = Types.Exact<{
 
 export type SignInMutation = { __typename?: 'Mutation', signin: { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar } };
 
-export type GetUserCookbooksQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type GetUserRecipesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetUserCookbooksQuery = { __typename?: 'Query', getUserCookbooks: Array<{ __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover }> };
-
-export type GetCookbookQueryVariables = Types.Exact<{
-  cookbookId: Types.Scalars['String']['input'];
-}>;
-
-
-export type GetCookbookQuery = { __typename?: 'Query', getCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover, recipes: Array<{ __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null }> } };
-
-export type CreateCookbookMutationVariables = Types.Exact<{
-  cookbookData: Types.CookbookValidator;
-}>;
-
-
-export type CreateCookbookMutation = { __typename?: 'Mutation', createCookbook: { __typename?: 'Cookbook', id: string, name: string, coverId: Types.CookbookCover } };
+export type GetUserRecipesQuery = { __typename?: 'Query', getUserRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null }> };
 
 export type CreateRecipeMutationVariables = Types.Exact<{
-  cookbookIds: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
   recipeData: Types.RecipeValidator;
 }>;
 
 
 export type CreateRecipeMutation = { __typename?: 'Mutation', createRecipe: { __typename?: 'Recipe', id: string } };
 
-export const CookbookResponseFragmentDoc = gql`
-    fragment CookbookResponse on Cookbook {
-  id
-  name
-  coverId
-}
-    `;
 export const RecipeResponseFragmentDoc = gql`
     fragment RecipeResponse on Recipe {
   id
@@ -101,36 +77,16 @@ export const SignInDocument = gql`
   }
 }
     ${UserResponseFragmentDoc}`;
-export const GetUserCookbooksDocument = gql`
-    query GetUserCookbooks {
-  getUserCookbooks {
-    ...CookbookResponse
+export const GetUserRecipesDocument = gql`
+    query GetUserRecipes {
+  getUserRecipes {
+    ...RecipeResponse
   }
 }
-    ${CookbookResponseFragmentDoc}`;
-export const GetCookbookDocument = gql`
-    query GetCookbook($cookbookId: String!) {
-  getCookbook(cookbookId: $cookbookId) {
-    ...CookbookResponse
-    recipes {
-      ...RecipeResponse
-    }
-  }
-}
-    ${CookbookResponseFragmentDoc}
-${RecipeResponseFragmentDoc}`;
-export const CreateCookbookDocument = gql`
-    mutation CreateCookbook($cookbookData: CookbookValidator!) {
-  createCookbook(cookbookData: $cookbookData) {
-    id
-    name
-    coverId
-  }
-}
-    `;
+    ${RecipeResponseFragmentDoc}`;
 export const CreateRecipeDocument = gql`
-    mutation CreateRecipe($cookbookIds: [String!]!, $recipeData: RecipeValidator!) {
-  createRecipe(cookbookIds: $cookbookIds, recipeData: $recipeData) {
+    mutation CreateRecipe($recipeData: RecipeValidator!) {
+  createRecipe(recipeData: $recipeData) {
     id
   }
 }

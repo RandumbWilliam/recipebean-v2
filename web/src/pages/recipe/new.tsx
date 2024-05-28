@@ -4,12 +4,15 @@ import { RecipeValidator } from "@/graphql/types";
 import DashboardLayout from "@/layouts/dashboard";
 import { urqlClient } from "@/utils/urqlClient";
 import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
 
 const CreateRecipe = () => {
+  const router = useRouter();
+
   const [, createRecipe] = useCreateRecipeMutation();
 
-  const onSave = async (cookbookIds: string[], recipeData: RecipeValidator) => {
-    const result = await createRecipe({ cookbookIds, recipeData });
+  const onSave = async (recipeData: RecipeValidator) => {
+    const result = await createRecipe({ recipeData });
 
     if (result.data?.createRecipe) {
       console.log(result.data.createRecipe);
