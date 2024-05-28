@@ -100,6 +100,12 @@ export class App {
     }
 
     this.app.use(
+      express.json({
+        limit: "10mb",
+      })
+    );
+
+    this.app.use(
       cors({
         origin: [config.CLIENT_BASE_URL, "https://studio.apollographql.com"],
         credentials: true,

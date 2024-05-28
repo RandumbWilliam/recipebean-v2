@@ -203,7 +203,7 @@ const validationSchema = z.object({
       return Number(val);
     })
     .pipe(z.number().int().nonnegative().finite().optional().default(0)),
-  imageUrl: z.string().optional(),
+  imageUrl: z.string().nullish(),
   ingredientItems: z.array(ingredientValidationSchmea).optional().default([]),
   instructionItems: z.array(instructionValidationSchema).optional().default([]),
 });
@@ -222,6 +222,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
     register,
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<RecipeData>({
     resolver: zodResolver(validationSchema),
@@ -279,26 +280,18 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
     onSave(recipeData);
   };
 
-  // const MAX_FILE_SIZE = 6 * 1024 * 1024; // 6 MB
-  // const handleCoverImage = (file: File) => {
-  //   const reader = (readFile: File) =>
-  //     new Promise<string>((resolve, reject) => {
-  //       if (readFile.size > MAX_FILE_SIZE) {
-  //         reject(new Error("File size exceeds the maximum limit."));
-  //         return;
-  //       }
-  //       const fileReader = new FileReader();
-  //       fileReader.onload = () => resolve(fileReader.result as string);
-  //       fileReader.readAsDataURL(readFile);
-  //     });
-  //   reader(file)
-  //     .then((result: string) =>
-  //       setRecipeData({ ...recipeData, imageBlob: result })
-  //     )
-  //     .catch((error: Error) => {
-  //       console.log(error);
-  //     });
-  // };
+  const MAX_FILE_SIZE = 6 * 1024 * 1024; // 6 MB
+  const handleRecipeBanner = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      if (file.size > MAX_FILE_SIZE) {
+        reject(new Error("File size exceeds the maximum limit."));
+        return;
+      }
+      const fileReader = new FileReader();
+      fileReader.onload = () => resolve(fileReader.result as string);
+      fileReader.readAsDataURL(file);
+    });
+  };
 
   const addIngredient = (ingredientItem: IngredientItem) => {
     const ingredient = {} as IngredientData;
@@ -387,83 +380,104 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
           <p>{errors.name?.message}</p>
         </TextField>
         <div>
-          <Label>Cover Image</Label>
           <Controller
             control={control}
             name="imageUrl"
             defaultValue=""
-            render={({ field: { onChange, value } }) => (
-              <div
-                className="cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                {value ? (
-                  <div className="relative w-full h-[352px] rounded-xl overflow-hidden">
-                    <Image
-                      src={value}
-                      alt="Preview cover image"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                    <div className="absolute bottom-3 right-3 flex gap-3">
-                      <button
-                        className="flex items-center justify-center bg-white w-auto h-10 rounded-md px-2"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        Change
-                      </button>
-                      <button
-                        className="flex items-center justify-center bg-white w-10 h-10 rounded-md"
-                        onClick={() => onChange("")}
-                      >
-                        <IconTrash />
-                      </button>
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <>
+                <Label>Cover Image</Label>
+                <p>{error && error.message}</p>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {value ? (
+                    <div className="relative w-full h-[352px] rounded-xl overflow-hidden">
+                      <Image
+                        src={value}
+                        alt="Preview cover image"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                      <div className="absolute bottom-3 right-3 flex gap-3">
+                        <button
+                          className="flex items-center justify-center bg-white w-auto h-10 rounded-md px-2"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          Change
+                        </button>
+                        <button
+                          className="flex items-center justify-center bg-white w-10 h-10 rounded-md"
+                          onClick={() => onChange(null)}
+                        >
+                          <IconTrash />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <DropZone
-                    className="flex h-[220px] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed text-sm data-[drop-target]:border-solid data-[drop-target]:border-brink-pink-500 data-[drop-target]:bg-brink-pink-100/10"
-                    onDrop={async (e) => {
-                      let item = e.items.find(
-                        (item) =>
-                          item.kind === "file" &&
-                          (item.type === "image/jpeg" ||
-                            item.type === "image/png")
-                      ) as FileDropItem;
-                      if (item) {
-                        const imageFile = await item.getFile();
-                        const imageUrl = URL.createObjectURL(imageFile);
-                        onChange(imageUrl);
-                      }
-                    }}
-                  >
-                    <FileTrigger
-                      ref={fileInputRef}
-                      onSelect={(e) => {
-                        let files = e ? Array.from(e) : [];
-                        const imageFile = files[0];
-                        if (
-                          imageFile.type === "image/jpeg" ||
-                          imageFile.type === "image/png"
-                        ) {
-                          const imageUrl = URL.createObjectURL(imageFile);
-                          onChange(imageUrl);
+                  ) : (
+                    <DropZone
+                      className="flex h-[220px] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed text-sm data-[drop-target]:border-solid data-[drop-target]:border-brink-pink-500 data-[drop-target]:bg-brink-pink-100/10"
+                      onDrop={async (e) => {
+                        let item = e.items.find(
+                          (item) =>
+                            item.kind === "file" &&
+                            (item.type === "image/jpeg" ||
+                              item.type === "image/png")
+                        ) as FileDropItem;
+                        if (item) {
+                          const imageFile = await item.getFile();
+                          handleRecipeBanner(imageFile)
+                            .then((result: string) => {
+                              onChange(result);
+                            })
+                            .catch((error: Error) => {
+                              setError("imageUrl", {
+                                message: error.message,
+                              });
+                            });
+                          // const imageUrl = URL.createObjectURL(imageFile);
+                          // onChange(imageUrl);
                         }
                       }}
-                    />
-                    <Image
-                      src="/dropzone-photo.svg"
-                      alt="Dropzone Image Icon"
-                      width={60}
-                      height={60}
-                    />
-                    <p>Drop and drop an image or click to browse.</p>
-                    <p className="text-gray-400">
-                      Max 6MB, Recommneded: 564 x 352
-                    </p>
-                  </DropZone>
-                )}
-              </div>
+                    >
+                      <FileTrigger
+                        ref={fileInputRef}
+                        onSelect={(e) => {
+                          let files = e ? Array.from(e) : [];
+                          const imageFile = files[0];
+                          if (
+                            imageFile.type === "image/jpeg" ||
+                            imageFile.type === "image/png"
+                          ) {
+                            handleRecipeBanner(imageFile)
+                              .then((result: string) => {
+                                onChange(result);
+                              })
+                              .catch((error: Error) => {
+                                setError("imageUrl", {
+                                  message: error.message,
+                                });
+                              });
+                            // const imageUrl = URL.createObjectURL(imageFile);
+                            // onChange(imageUrl);
+                          }
+                        }}
+                      />
+                      <Image
+                        src="/dropzone-photo.svg"
+                        alt="Dropzone Image Icon"
+                        width={60}
+                        height={60}
+                      />
+                      <p>Drop and drop an image or click to browse.</p>
+                      <p className="text-gray-400">
+                        Max 6MB, Recommneded: 564 x 352
+                      </p>
+                    </DropZone>
+                  )}
+                </div>
+              </>
             )}
           />
         </div>

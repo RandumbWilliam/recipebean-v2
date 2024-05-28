@@ -2,6 +2,7 @@ import DI from "@database/index";
 import { Recipe } from "@entities/recipe.entity";
 import { User } from "@entities/user.entity";
 import { HttpException } from "@exceptions/httpException";
+import * as cloudinary from "@utils/cloudinary";
 import RecipeValidator from "@validators/recipe.validator";
 
 export class RecipeService {
@@ -23,6 +24,12 @@ export class RecipeService {
     user: User,
     recipeData: RecipeValidator
   ): Promise<Recipe> {
+    if (recipeData.imageUrl && cloudinary.validateBase64(recipeData.imageUrl)) {
+      const recipeBannerUrl = await cloudinary.upload(recipeData.imageUrl);
+
+      recipeData.imageUrl = recipeBannerUrl;
+    }
+
     const recipe = DI.recipeRespository.create({
       name: recipeData.name,
       servings: recipeData.servings,

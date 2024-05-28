@@ -12,6 +12,9 @@ interface ENV {
   DB_NAME: string | undefined;
   REDIS_URL: string | undefined;
   SESSION_SECRET: string | undefined;
+  CLOUDINARY_CLOUD_NAME: string | undefined;
+  CLOUDINARY_API_KEY: string | undefined;
+  CLOUDINARY_API_SECRET: string | undefined;
 }
 
 interface Config {
@@ -25,6 +28,9 @@ interface Config {
   DB_NAME: string;
   REDIS_URL: string;
   SESSION_SECRET: string;
+  CLOUDINARY_CLOUD_NAME: string;
+  CLOUDINARY_API_KEY: string;
+  CLOUDINARY_API_SECRET: string;
 }
 
 const getConfig = (): ENV => {
@@ -39,6 +45,9 @@ const getConfig = (): ENV => {
     DB_NAME: process.env.DB_NAME,
     REDIS_URL: process.env.REDIS_URL,
     SESSION_SECRET: process.env.SESSION_SECRET,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   };
 };
 
