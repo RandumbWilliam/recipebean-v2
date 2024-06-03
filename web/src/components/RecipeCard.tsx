@@ -34,7 +34,8 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ className, recipe }) => {
         <Image
           src={recipe.imageUrl ?? DefaultRecipeBanner.src}
           alt="cookbook-cover"
-          fill={true}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover"
         />
       </div>

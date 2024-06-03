@@ -18,7 +18,12 @@ const Avatar: React.FC<AvatarProps> = ({ className, user }) => {
           className
         )}
       >
-        <Image src={AvatarUrls[user.avatarId]} alt="avatar-image" fill={true} />
+        <Image
+          src={AvatarUrls[user.avatarId]}
+          alt="avatar-image"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
       </div>
     </>
   );
