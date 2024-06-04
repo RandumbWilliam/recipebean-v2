@@ -4,6 +4,27 @@ query GetUserRecipes {
   }
 }
 
+query GetRecipe($recipeId: String!) {
+  getRecipe(recipeId: $recipeId) {
+    id
+    name
+    servings
+    prepTime
+    cookTime
+    imageUrl
+    ingredientItems {
+      id
+      rank
+      header
+    }
+    instructionItems {
+      id
+      rank
+      header
+    }
+  }
+}
+
 mutation CreateRecipe($recipeData: RecipeValidator!) {
   createRecipe(recipeData: $recipeData) {
     id

@@ -19,6 +19,10 @@ export function useGetUserRecipesQuery(options?: Omit<Urql.UseQueryArgs<Operatio
   return Urql.useQuery<Operations.GetUserRecipesQuery, Operations.GetUserRecipesQueryVariables>({ query: Operations.GetUserRecipesDocument, ...options });
 };
 
+export function useGetRecipeQuery(options: Omit<Urql.UseQueryArgs<Operations.GetRecipeQueryVariables>, 'query'>) {
+  return Urql.useQuery<Operations.GetRecipeQuery, Operations.GetRecipeQueryVariables>({ query: Operations.GetRecipeDocument, ...options });
+};
+
 export function useCreateRecipeMutation() {
   return Urql.useMutation<Operations.CreateRecipeMutation, Operations.CreateRecipeMutationVariables>(Operations.CreateRecipeDocument);
 };

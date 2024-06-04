@@ -13,9 +13,12 @@ export class RecipeService {
   }
 
   public async findById(recipeId: string): Promise<Recipe | null> {
-    const recipe: Recipe | null = await DI.recipeRespository.findOne({
-      id: recipeId,
-    });
+    const recipe: Recipe | null = await DI.recipeRespository.findOne(
+      {
+        id: recipeId,
+      },
+      { populate: ["ingredientItems", "instructionItems"] }
+    );
 
     return recipe;
   }

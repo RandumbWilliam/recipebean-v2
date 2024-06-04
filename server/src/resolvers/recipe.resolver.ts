@@ -30,6 +30,13 @@ export class RecipeResolver {
     return recipes;
   }
 
+  @Query(() => Recipe)
+  async getRecipe(@Arg("recipeId") recipeId: string): Promise<Recipe | null> {
+    const recipe: Recipe | null = await this.recipeService.findById(recipeId);
+
+    return recipe;
+  }
+
   @Mutation(() => Recipe)
   async createRecipe(
     @Arg("recipeData") recipeData: RecipeValidator,

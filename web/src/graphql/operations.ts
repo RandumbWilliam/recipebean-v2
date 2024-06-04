@@ -31,6 +31,13 @@ export type GetUserRecipesQueryVariables = Types.Exact<{ [key: string]: never; }
 
 export type GetUserRecipesQuery = { __typename?: 'Query', getUserRecipes: Array<{ __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null }> };
 
+export type GetRecipeQueryVariables = Types.Exact<{
+  recipeId: Types.Scalars['String']['input'];
+}>;
+
+
+export type GetRecipeQuery = { __typename?: 'Query', getRecipe: { __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null, ingredientItems: Array<{ __typename?: 'IngredientItem', id: string, rank: number, header?: string | null }>, instructionItems: Array<{ __typename?: 'InstructionItem', id: string, rank: number, header?: string | null }> } };
+
 export type CreateRecipeMutationVariables = Types.Exact<{
   recipeData: Types.RecipeValidator;
 }>;
@@ -84,6 +91,28 @@ export const GetUserRecipesDocument = gql`
   }
 }
     ${RecipeResponseFragmentDoc}`;
+export const GetRecipeDocument = gql`
+    query GetRecipe($recipeId: String!) {
+  getRecipe(recipeId: $recipeId) {
+    id
+    name
+    servings
+    prepTime
+    cookTime
+    imageUrl
+    ingredientItems {
+      id
+      rank
+      header
+    }
+    instructionItems {
+      id
+      rank
+      header
+    }
+  }
+}
+    `;
 export const CreateRecipeDocument = gql`
     mutation CreateRecipe($recipeData: RecipeValidator!) {
   createRecipe(recipeData: $recipeData) {

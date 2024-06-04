@@ -41,7 +41,9 @@ const Dashboard = () => {
       <>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {data.getUserRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <Link key={recipe.id} href={`/recipe/${recipe.id}`}>
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            </Link>
           ))}
         </div>
         <div className="absolute right-2 bottom-2">

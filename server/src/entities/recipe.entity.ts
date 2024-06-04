@@ -36,9 +36,11 @@ export class Recipe extends Base<Recipe> {
   @Property({ type: types.string, nullable: true })
   public imageUrl?: string;
 
+  @Field(() => [IngredientItem])
   @OneToMany(() => IngredientItem, (ingredientItem) => ingredientItem.recipe)
   public ingredientItems = new Collection<IngredientItem>(this);
 
+  @Field(() => [InstructionItem])
   @OneToMany(() => InstructionItem, (isntructionItem) => isntructionItem.recipe)
   public instructionItems = new Collection<InstructionItem>(this);
 

@@ -21,6 +21,15 @@ export type Base = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
+export type IngredientItem = Base & {
+  __typename?: 'IngredientItem';
+  createdAt: Scalars['DateTimeISO']['output'];
+  header?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  rank: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
 export type IngredientItemValidator = {
   header?: InputMaybe<Scalars['String']['input']>;
   ingredient?: InputMaybe<IngredientValidator>;
@@ -34,6 +43,15 @@ export type IngredientValidator = {
   hasAlternativeIngredients: Scalars['Boolean']['input'];
   measurement?: InputMaybe<Array<MeasurementValidator>>;
   name: Array<Scalars['String']['input']>;
+};
+
+export type InstructionItem = Base & {
+  __typename?: 'InstructionItem';
+  createdAt: Scalars['DateTimeISO']['output'];
+  header?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  rank: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export type InstructionItemValidator = {
@@ -119,8 +137,14 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getRecipe: Recipe;
   getUserRecipes: Array<Recipe>;
   myUser: User;
+};
+
+
+export type QueryGetRecipeArgs = {
+  recipeId: Scalars['String']['input'];
 };
 
 export type Recipe = Base & {
@@ -129,6 +153,8 @@ export type Recipe = Base & {
   createdAt: Scalars['DateTimeISO']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
+  ingredientItems: Array<IngredientItem>;
+  instructionItems: Array<InstructionItem>;
   name: Scalars['String']['output'];
   prepTime?: Maybe<Scalars['Float']['output']>;
   servings?: Maybe<Scalars['Float']['output']>;
