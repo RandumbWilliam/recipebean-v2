@@ -23,9 +23,9 @@ import RecipeInstructionInput, {
   type InstructionItem,
 } from "./RecipeInstructionInput";
 import { IconMenu, IconTrash, IconX } from "./icons";
-import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
+import { Button } from "./ui/button";
 
 const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
   const [enabled, setEnabled] = useState(false);
@@ -113,7 +113,7 @@ function EditableField({
   if (defaultItem.header) {
     return (
       <h5
-        className="text-brink-pink-500 text-lg font-semibold py-2 px-3"
+        className="text-primary text-lg font-semibold py-2 px-3"
         onClick={enableEditing}
       >
         {value}
@@ -417,7 +417,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
                     </div>
                   ) : (
                     <DropZone
-                      className="flex h-[220px] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed text-sm data-[drop-target]:border-solid data-[drop-target]:border-brink-pink-500 data-[drop-target]:bg-brink-pink-100/10"
+                      className="flex h-[220px] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed text-sm data-[drop-target]:border-solid data-[drop-target]:border-primary data-[drop-target]:bg-primary/10"
                       onDrop={async (e) => {
                         let item = e.items.find(
                           (item) =>
@@ -489,7 +489,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
             {ingredientItemFields.length > 0 && (
               <button
                 type="button"
-                className="text-brink-pink-500 font-semibold"
+                className="text-primary font-semibold"
                 onClick={() => setReorderIngredient(!reorderIngredient)}
               >
                 {reorderIngredient ? "Done" : "Reorder"}
@@ -517,7 +517,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
                                 className="flex justify-between"
                               >
                                 {field.header ? (
-                                  <h5 className="text-brink-pink-500 text-lg font-semibold py-2 px-3">
+                                  <h5 className="text-primary text-lg font-semibold py-2 px-3">
                                     {field.header}
                                   </h5>
                                 ) : (
@@ -569,7 +569,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
             {instructionItemFields.length > 0 && (
               <button
                 type="button"
-                className="text-brink-pink-500 font-semibold"
+                className="text-primary font-semibold"
                 onClick={() => setReorderInstruction(!reorderInstruction)}
               >
                 {reorderInstruction ? "Done" : "Reorder"}
@@ -597,7 +597,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
                                 className="flex justify-between"
                               >
                                 {field.header ? (
-                                  <h5 className="text-brink-pink-500 text-lg font-semibold py-2 px-3">
+                                  <h5 className="text-primary text-lg font-semibold py-2 px-3">
                                     {field.header}
                                   </h5>
                                 ) : (

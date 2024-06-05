@@ -12,7 +12,7 @@ export class AuthResolver {
   public authService = new AuthService();
   public userService = new UserService();
 
-  @Query(() => User)
+  @Query(() => User, { nullable: true })
   async myUser(@Ctx() { req }: MyContext): Promise<User | null> {
     if (!req.session.userId) {
       return null;

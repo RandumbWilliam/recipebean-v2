@@ -7,7 +7,7 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className }) => (
   <svg
-    className={cn("h-12 w-auto fill-current text-brink-pink-500", className)}
+    className={cn("h-12 w-auto fill-current text-primary", className)}
     viewBox="0 0 2591 563"
     xmlns="http://www.w3.org/2000/svg"
   >

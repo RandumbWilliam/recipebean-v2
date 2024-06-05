@@ -8,8 +8,8 @@ import { urqlClient } from "@/utils/urqlClient";
 
 import RecipeCard from "@/components/RecipeCard";
 import { IconBookAdd } from "@/components/icons";
-import { Button, buttonVariants } from "@/components/ui/Button";
-import DashboardLayout from "@/layouts/dashboard";
+import { Button, buttonVariants } from "@/components/ui/button";
+import DefaultLayout from "@/layouts/default";
 
 const Dashboard = () => {
   const [{ data, fetching }] = useGetUserRecipesQuery({
@@ -46,29 +46,32 @@ const Dashboard = () => {
             </Link>
           ))}
         </div>
-        <div className="absolute right-2 bottom-2">
-          <Button className="rounded-full p-3 block md:hidden">
+        <div className="absolute right-4 bottom-4">
+          <button className="flex items-center justify-center w-12 h-12 bg-primary text-white rounded-full p-3 md:hidden">
             <IconBookAdd />
-          </Button>
+          </button>
         </div>
       </>
     );
   }
 
   return (
-    <DashboardLayout>
+    <DefaultLayout>
       <div className="wrapper">
         <div className="flex flex-col gap-3 mb-6">
           <div className="flex justify-between">
-            <h1 className="h2-bold">Your Recipes</h1>
-            <Link href="/recipe/new" className={cn(buttonVariants())}>
+            <h1 className="text-3xl font-semibold">Your Recipes</h1>
+            <Link
+              href="/recipe/new"
+              className={cn(buttonVariants(), "hidden md:flex")}
+            >
               Add Recipe
             </Link>
           </div>
         </div>
         {renderBody()}
       </div>
-    </DashboardLayout>
+    </DefaultLayout>
   );
 };
 

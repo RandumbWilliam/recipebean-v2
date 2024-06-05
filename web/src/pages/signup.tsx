@@ -9,7 +9,7 @@ import { UserAvatar } from "@/graphql/types";
 
 import AuthSidebar from "@/components/AuthSidebar";
 import { IconGoogle } from "@/components/icons";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import AuthLayout from "@/layouts/auth";
@@ -86,27 +86,11 @@ const Signup = () => {
             </TextField>
             <div className="flex flex-col mt-5">
               <Button type="submit">Create Account</Button>
-              <div className="relative flex py-5 items-center">
-                <div className="flex-grow border-t border-gray-400"></div>
-                <span className="flex-shrink mx-4 text-gray-400 text-sm">
-                  or
-                </span>
-                <div className="flex-grow border-t border-gray-400"></div>
-              </div>
-              <Button
-                type="submit"
-                className="bg-rich-black-500 hover:bg-rich-black-700"
-              >
-                <span className="flex items-center gap-2">
-                  <IconGoogle className="h-4 w-4" />
-                  <p>Sign up with Google</p>
-                </span>
-              </Button>
             </div>
           </form>
           <p className="text-center mt-5 text-sm">
             Already have an account?{" "}
-            <Link href="/signin" className="text-brink-pink-500">
+            <Link href="/signin" className="text-primary">
               Sign In
             </Link>
           </p>

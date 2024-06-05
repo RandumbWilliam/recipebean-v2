@@ -17,7 +17,7 @@ const spinnerVariants = cva(
   {
     variants: {
       color: {
-        primary: "border-t-brink-pink-500",
+        primary: "border-t-primary",
         white: "border-t-white",
       },
       size: {

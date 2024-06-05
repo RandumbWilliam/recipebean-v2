@@ -15,3 +15,7 @@ mutation SignIn($password: String!, $email: String!) {
     ...UserResponse
   }
 }
+
+mutation Logout {
+  logout
+}

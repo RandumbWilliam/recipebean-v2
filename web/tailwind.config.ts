@@ -1,53 +1,100 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
-const config: Config = {
+const config = {
+  darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
+  prefix: "",
   theme: {
+    // container: {
+    //   center: true,
+    //   padding: "2rem",
+    //   screens: {
+    //     "2xl": "1400px",
+    //   },
+    // },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
       colors: {
-        "brink-pink": {
-          100: "#FFBDC5",
-          200: "#FF8B99",
-          300: "#FF7A8A",
-          400: "#FF6A7C",
-          500: "#FF596D",
-          600: "#E65062",
-          700: "#CC4757",
-          800: "#B33E4C",
-          900: "#993541",
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
-        "rich-black": {
-          100: "#676e75",
-          200: "#4e565e",
-          300: "#353d47",
-          400: "#1b2530",
-          500: "#020d19",
-          600: "#020c17",
-          700: "#020a14",
-          800: "#010912",
-          900: "#01080f",
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
-        spinner: "lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
-      },
-      keyframes: {
-        "lds-ring": {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" },
-        },
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [require("tailwindcss-react-aria-components")],
-};
+  corePlugins: {
+    container: false,
+  },
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(({ addComponents }) => {
+      addComponents({
+        ".container": {
+          marginInline: "auto",
+          paddingInline: "1rem",
+          maxWidth: "1400px",
+          width: "100%",
+
+          "@screen md": {
+            paddingInline: "2rem",
+          },
+        },
+      });
+    }),
+  ],
+} satisfies Config;
+
 export default config;

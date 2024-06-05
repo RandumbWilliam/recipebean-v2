@@ -82,7 +82,7 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
         />
         <button
           type="button"
-          className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-brink-pink-500 rounded-md"
+          className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-primary rounded-md"
           onClick={submitIngredientItem}
         >
           <IconPlus className="fill-white" />
@@ -93,8 +93,8 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
         className="flex gap-1.5 items-center"
         onClick={() => setShowIngredientHeader(true)}
       >
-        <IconPlus className="h-4 w-4 fill-brink-pink-500" />{" "}
-        <p className="text-brink-pink-500">Header</p>
+        <IconPlus className="h-4 w-4 fill-primary" />{" "}
+        <p className="text-primary">Header</p>
       </button>
     </div>
   );

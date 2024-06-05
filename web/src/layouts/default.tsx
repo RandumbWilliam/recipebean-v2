@@ -8,7 +8,7 @@ export default function DefaultLayout({
   return (
     <article className="flex h-screen flex-col">
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 container pt-[120px]">{children}</main>
     </article>
   );
 }

@@ -22,7 +22,7 @@ const ServingsCounter: React.FC<ServingsCounterProps> = ({
         <IconMinus
           className={clsx("w-4 h-4", {
             "fill-gray-400": servings === 0,
-            "fill-brink-pink-500": servings !== 0,
+            "fill-primary": servings !== 0,
           })}
         />
       </button>
@@ -35,7 +35,7 @@ const ServingsCounter: React.FC<ServingsCounterProps> = ({
         <IconPlus
           className={clsx("w-4 h-4", {
             "fill-gray-400": servings === 99,
-            "fill-brink-pink-500": servings !== 99,
+            "fill-primary": servings !== 99,
           })}
         />
       </button>

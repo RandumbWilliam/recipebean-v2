@@ -1,4 +1,5 @@
 import {
+  LogoutMutation,
   MyUserDocument,
   MyUserQuery,
   SignInMutation,
@@ -55,6 +56,14 @@ export const urqlClient = (ssrExchange: any, ctx: any) => {
                     myUser: result.signup,
                   };
                 }
+              );
+            },
+            logout: (_result, args, cache, info) => {
+              updateQuery<LogoutMutation, MyUserQuery>(
+                cache,
+                { query: MyUserDocument },
+                _result,
+                () => ({ myUser: null })
               );
             },
           },

@@ -1,7 +1,7 @@
 import RecipeForm from "@/components/RecipeForm";
 import { useCreateRecipeMutation } from "@/graphql/hooks";
 import { RecipeValidator } from "@/graphql/types";
-import DashboardLayout from "@/layouts/dashboard";
+import DefaultLayout from "@/layouts/default";
 import { urqlClient } from "@/utils/urqlClient";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -20,11 +20,11 @@ const CreateRecipe = () => {
   };
 
   return (
-    <DashboardLayout>
+    <DefaultLayout>
       <div className="wrapper flex justify-center">
         <RecipeForm className="w-full max-w-[960px]" onSave={onSave} />
       </div>
-    </DashboardLayout>
+    </DefaultLayout>
   );
 };
 

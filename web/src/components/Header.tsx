@@ -1,9 +1,18 @@
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { AvatarUrls } from "@/data/avatarUrls";
+import { useLogoutMutation, useMyUserQuery } from "@/graphql/hooks";
+import { isServer } from "@/utils/isServer";
 import { twTheme } from "@/utils/twConfig";
 import clsx from "clsx";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IconMenu, IconX } from "./icons";
-import { Button, buttonVariants } from "./ui/Button";
+import { IconLogout, IconMenu, IconX } from "./icons";
+import Avatar from "./ui/Avatar";
 import Logo from "./ui/Logo";
 
 const BREAKPOINT_MD = parseInt(twTheme.screens.md.slice(0, -2));
@@ -30,6 +39,12 @@ function MobileMenu({ isOpen }: { isOpen: boolean }) {
 }
 
 const Header = () => {
+  const [{ data }] = useMyUserQuery({
+    pause: isServer(),
+  });
+
+  const [, logout] = useLogoutMutation();
+
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -58,33 +73,58 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleLogout = async () => {
+    await logout({});
+  };
+
   return (
     <>
       <header className="fixed w-full py-2 md:py-4 bg-white z-50">
-        <div className="wrapper flex items-center justify-between">
+        <div className="container flex items-center justify-between h-20">
           <Link href="/">
             <Logo className="h-8 md:h-12" />
           </Link>
-          <div className="hidden md:flex justify-end gap-3">
-            <Link
-              href="/signin"
-              className={buttonVariants({ variant: "secondary" })}
-            >
-              Log In
-            </Link>
-            <Link
-              href="/signup"
-              className={buttonVariants({ variant: "primary" })}
-            >
-              Sign Up
-            </Link>
+          <div className="hidden md:flex justify-end">
+            {data?.myUser ? (
+              <Popover>
+                <PopoverTrigger>
+                  <Avatar
+                    className="md:h-16 md:w-16"
+                    src={AvatarUrls[data.myUser.avatarId]}
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="w-60" align="end">
+                  <div className="grid gap-4">
+                    <button
+                      className="flex items-center gap-3 hover:text-primary font-medium"
+                      onClick={handleLogout}
+                    >
+                      <IconLogout />
+                      <p>Log out</p>
+                    </button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <div className="flex gap-3">
+                <Link
+                  href="/signin"
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  Log In
+                </Link>
+                <Link href="/signup" className={buttonVariants()}>
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
           <div className="md:hidden">
             <button onClick={toggleNav}>
               {isOpen ? (
-                <IconX className="h-8 w-8 text-brink-pink-500" />
+                <IconX className="h-8 w-8 text-primary" />
               ) : (
-                <IconMenu className="h-8 w-8 text-brink-pink-500" />
+                <IconMenu className="h-8 w-8 text-primary" />
               )}
             </button>
           </div>

@@ -15,6 +15,10 @@ export function useSignInMutation() {
   return Urql.useMutation<Operations.SignInMutation, Operations.SignInMutationVariables>(Operations.SignInDocument);
 };
 
+export function useLogoutMutation() {
+  return Urql.useMutation<Operations.LogoutMutation, Operations.LogoutMutationVariables>(Operations.LogoutDocument);
+};
+
 export function useGetUserRecipesQuery(options?: Omit<Urql.UseQueryArgs<Operations.GetUserRecipesQueryVariables>, 'query'>) {
   return Urql.useQuery<Operations.GetUserRecipesQuery, Operations.GetUserRecipesQueryVariables>({ query: Operations.GetUserRecipesDocument, ...options });
 };

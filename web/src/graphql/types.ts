@@ -139,7 +139,7 @@ export type Query = {
   __typename?: 'Query';
   getRecipe: Recipe;
   getUserRecipes: Array<Recipe>;
-  myUser: User;
+  myUser?: Maybe<User>;
 };
 
 

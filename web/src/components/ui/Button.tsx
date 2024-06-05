@@ -1,48 +1,34 @@
-import { cn } from "@/utils/cn";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
-import React from "react";
-import {
-  Button as RACButton,
-  type ButtonProps as RACButtonProps,
-} from "react-aria-components";
+import * as React from "react";
+
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  [
-    "inline-flex",
-    "gap-2",
-    "align-middle",
-    "justify-center",
-    "items-center",
-    "whitespace-nowrap",
-    "rounded-lg",
-    "disabled:pointer-events-none",
-    "disabled:opacity-50",
-    "outline-none",
-    "ring-offset-2",
-    "focus-visible:ring-2",
-    "ring-brink-pink-500/70",
-  ],
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary: ["bg-brink-pink-500", "text-white", "hover:bg-brink-pink-700"],
-        secondary: [
-          "border-2",
-          "border-brink-pink-500",
-          "text-brink-pink-500",
-          "hover:bg-brink-pink-500",
-          "hover:text-white",
-        ],
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "text-primary border border-primary bg-background hover:bg-primary hover:text-background",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        small: ["text-sm", "py-1", "px-4"],
-        default: ["text-base", "py-2", "px-8"],
-        large: ["text-lg", "py-3", "px-12"],
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
       },
     },
     defaultVariants: {
-      variant: "primary",
+      variant: "default",
       size: "default",
     },
   }
@@ -54,23 +40,34 @@ const Spinner = () => (
   </div>
 );
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  RACButtonProps &
-  VariantProps<typeof buttonVariants> & {
-    loading?: boolean;
-  };
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  loading?: boolean;
+}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (props, ref) => {
-    const { children, className, variant, size, loading, isDisabled, ...rest } =
-      props;
-
+  (
+    {
+      children,
+      className,
+      variant,
+      size,
+      asChild = false,
+      disabled,
+      loading,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
     return (
-      <RACButton
-        ref={ref}
+      <Comp
         className={cn(buttonVariants({ variant, size, className }))}
-        {...rest}
-        isDisabled={isDisabled || loading}
+        ref={ref}
+        disabled={disabled || loading}
+        {...props}
       >
         {loading && <Spinner />}
         <span
@@ -81,11 +78,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         >
           {children}
         </span>
-      </RACButton>
+      </Comp>
     );
   }
 );
-
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

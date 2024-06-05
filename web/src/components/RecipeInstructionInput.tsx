@@ -62,7 +62,7 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
           />
           <button
             type="button"
-            className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-brink-pink-500 rounded-md"
+            className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-primary rounded-md"
             onClick={submitInstructionItem}
           >
             <IconPlus className="fill-white" />
@@ -82,7 +82,7 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
         />
         <button
           type="button"
-          className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-brink-pink-500 rounded-md"
+          className="flex items-center justify-center h-[42px] w-[42px] min-w-[42px] bg-primary rounded-md"
           onClick={submitInstructionItem}
         >
           <IconPlus className="fill-white" />
@@ -93,8 +93,8 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
         className="flex gap-1.5 items-center"
         onClick={() => setShowInstructionHeader(true)}
       >
-        <IconPlus className="h-4 w-4 fill-brink-pink-500" />{" "}
-        <p className="text-brink-pink-500">Header</p>
+        <IconPlus className="h-4 w-4 fill-primary" />{" "}
+        <p className="text-primary">Header</p>
       </button>
     </div>
   );

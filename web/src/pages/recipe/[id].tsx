@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { useGetRecipeQuery } from "@/graphql/hooks";
-import DashboardLayout from "@/layouts/dashboard";
 import { twTheme } from "@/utils/twConfig";
 import { urqlClient } from "@/utils/urqlClient";
 
 import ServingsCounter from "@/components/ServingsCounter";
 import { IconStopwatch } from "@/components/icons";
+import DefaultLayout from "@/layouts/default";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -73,7 +73,7 @@ const Recipe = () => {
         {isMobile ? (
           <>
             <div className="flex flex-col gap-3">
-              <h2 className="h2-bold w-full">{name}</h2>
+              <h2 className="text-2xl font-semibold w-full">{name}</h2>
               <div className="relative w-full h-48 rounded-2xl overflow-hidden">
                 <Image
                   src={imageUrl ?? DefaultRecipeBanner.src}
@@ -108,7 +108,7 @@ const Recipe = () => {
               />
             </div>
             <div className="flex flex-col gap-3 w-full">
-              <h2 className="h2-bold w-full">{name}</h2>
+              <h2 className="text-2xl font-semibold w-full">{name}</h2>
               <div className="flex items-center gap-1.5">
                 <IconStopwatch className="fill-gray-400" />
                 <p>
@@ -125,7 +125,7 @@ const Recipe = () => {
         )}
         <div className="flex flex-col gap-3">
           <div className="flex justify-between">
-            <p className="p-medium-24">Ingredients</p>
+            <p className="text-lg font-medium">Ingredients</p>
             <ServingsCounter
               servings={servings}
               onIncrement={handleIncrementServings}
@@ -147,7 +147,7 @@ const Recipe = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <p className="p-medium-24">Instructions</p>
+          <p className="text-lg font-medium">Instructions</p>
           <div>
             {instructionItems.length === 0 ? (
               <p className="text-gray-400">No Instructions.</p>
@@ -167,14 +167,16 @@ const Recipe = () => {
   }
 
   return (
-    <DashboardLayout>
-      <div className="wrapper flex flex-col gap-3">
-        <Link href="/" className="text-brink-pink-500">
-          Back
-        </Link>
-        {renderBody()}
+    <DefaultLayout>
+      <div className="wrapper flex flex-col items-center gap-3">
+        <div className="flex flex-col w-full max-w-4xl">
+          <Link href="/" className="text-primary mb-3">
+            Back
+          </Link>
+          <div>{renderBody()}</div>
+        </div>
       </div>
-    </DashboardLayout>
+    </DefaultLayout>
   );
 };
 

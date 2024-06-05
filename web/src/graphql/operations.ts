@@ -9,7 +9,7 @@ export type UserResponseFragment = { __typename?: 'User', id: string, email: str
 export type MyUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type MyUserQuery = { __typename?: 'Query', myUser: { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar } };
+export type MyUserQuery = { __typename?: 'Query', myUser?: { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar } | null };
 
 export type SignUpMutationVariables = Types.Exact<{
   userData: Types.UserValidator;
@@ -25,6 +25,11 @@ export type SignInMutationVariables = Types.Exact<{
 
 
 export type SignInMutation = { __typename?: 'Mutation', signin: { __typename?: 'User', id: string, email: string, fullName: string, avatarId: Types.UserAvatar } };
+
+export type LogoutMutationVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export type GetUserRecipesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -84,6 +89,11 @@ export const SignInDocument = gql`
   }
 }
     ${UserResponseFragmentDoc}`;
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
 export const GetUserRecipesDocument = gql`
     query GetUserRecipes {
   getUserRecipes {

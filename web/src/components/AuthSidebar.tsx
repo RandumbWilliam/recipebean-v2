@@ -14,7 +14,7 @@ const AuthSidebar: React.FC<SidebarProps> = ({ className, imageSrc, text }) => {
   return (
     <div
       className={cn(
-        "hidden lg:flex flex-col items-center justify-center h-full bg-brink-pink-200 w-[580px]",
+        "hidden lg:flex flex-col items-center justify-center h-full bg-primary/70 w-[580px]",
         className
       )}
     >
