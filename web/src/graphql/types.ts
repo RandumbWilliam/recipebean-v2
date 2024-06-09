@@ -21,11 +21,25 @@ export type Base = {
   updatedAt: Scalars['DateTimeISO']['output'];
 };
 
+export type Ingredient = Base & {
+  __typename?: 'Ingredient';
+  additional?: Maybe<Scalars['String']['output']>;
+  convertedMeasurement?: Maybe<Measurement>;
+  createdAt: Scalars['DateTimeISO']['output'];
+  hasAddedMeasurements: Scalars['Boolean']['output'];
+  hasAlternativeIngredients: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  measurement?: Maybe<Measurement>;
+  name: Array<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
 export type IngredientItem = Base & {
   __typename?: 'IngredientItem';
   createdAt: Scalars['DateTimeISO']['output'];
   header?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  ingredient: Ingredient;
   rank: Scalars['Float']['output'];
   updatedAt: Scalars['DateTimeISO']['output'];
 };
@@ -45,11 +59,20 @@ export type IngredientValidator = {
   name: Array<Scalars['String']['input']>;
 };
 
+export type Instruction = Base & {
+  __typename?: 'Instruction';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['ID']['output'];
+  text: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
 export type InstructionItem = Base & {
   __typename?: 'InstructionItem';
   createdAt: Scalars['DateTimeISO']['output'];
   header?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  instruction: Instruction;
   rank: Scalars['Float']['output'];
   updatedAt: Scalars['DateTimeISO']['output'];
 };
@@ -62,6 +85,14 @@ export type InstructionItemValidator = {
 
 export type InstructionValidator = {
   text: Scalars['String']['input'];
+};
+
+export type Measurement = {
+  __typename?: 'Measurement';
+  isRange: Scalars['Boolean']['output'];
+  quantity?: Maybe<Array<Scalars['Float']['output']>>;
+  unit?: Maybe<Scalars['String']['output']>;
+  unitPlural?: Maybe<Scalars['String']['output']>;
 };
 
 export type MeasurementValidator = {

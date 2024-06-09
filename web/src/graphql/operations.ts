@@ -41,7 +41,7 @@ export type GetRecipeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetRecipeQuery = { __typename?: 'Query', getRecipe: { __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null, ingredientItems: Array<{ __typename?: 'IngredientItem', id: string, rank: number, header?: string | null }>, instructionItems: Array<{ __typename?: 'InstructionItem', id: string, rank: number, header?: string | null }> } };
+export type GetRecipeQuery = { __typename?: 'Query', getRecipe: { __typename?: 'Recipe', id: string, name: string, servings?: number | null, prepTime?: number | null, cookTime?: number | null, imageUrl?: string | null, ingredientItems: Array<{ __typename?: 'IngredientItem', id: string, rank: number, header?: string | null, ingredient: { __typename?: 'Ingredient', id: string, name: Array<string>, hasAddedMeasurements: boolean, hasAlternativeIngredients: boolean, additional?: string | null, measurement?: { __typename?: 'Measurement', isRange: boolean, quantity?: Array<number> | null, unit?: string | null, unitPlural?: string | null } | null, convertedMeasurement?: { __typename?: 'Measurement', isRange: boolean, quantity?: Array<number> | null, unit?: string | null, unitPlural?: string | null } | null } }>, instructionItems: Array<{ __typename?: 'InstructionItem', id: string, rank: number, header?: string | null, instruction: { __typename?: 'Instruction', id: string, text: string } }> } };
 
 export type CreateRecipeMutationVariables = Types.Exact<{
   recipeData: Types.RecipeValidator;
@@ -114,11 +114,34 @@ export const GetRecipeDocument = gql`
       id
       rank
       header
+      ingredient {
+        id
+        name
+        measurement {
+          isRange
+          quantity
+          unit
+          unitPlural
+        }
+        convertedMeasurement {
+          isRange
+          quantity
+          unit
+          unitPlural
+        }
+        hasAddedMeasurements
+        hasAlternativeIngredients
+        additional
+      }
     }
     instructionItems {
       id
       rank
       header
+      instruction {
+        id
+        text
+      }
     }
   }
 }

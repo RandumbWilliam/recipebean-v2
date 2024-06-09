@@ -25,7 +25,11 @@ function convertMinutesToHoursAndMinutes(minutes: number) {
 const RecipeCard: React.FC<RecipeCardProps> = ({ className, recipe }) => {
   const totalTime = useMemo(() => {
     const totalMinutes = (recipe.cookTime ?? 0) + (recipe.prepTime ?? 0);
-    return convertMinutesToHoursAndMinutes(totalMinutes);
+    if (totalMinutes === 0) {
+      return "-";
+    } else {
+      return convertMinutesToHoursAndMinutes(totalMinutes);
+    }
   }, [recipe.cookTime, recipe.prepTime]);
 
   return (

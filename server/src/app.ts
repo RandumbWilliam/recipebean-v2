@@ -140,7 +140,7 @@ export class App {
   private async initializeApolloServer(resolvers) {
     const schema = await buildSchema({
       resolvers,
-      validate: false,
+      validate: true,
     });
 
     const apolloServer = new ApolloServer({

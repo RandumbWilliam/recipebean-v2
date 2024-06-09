@@ -16,11 +16,34 @@ query GetRecipe($recipeId: String!) {
       id
       rank
       header
+      ingredient {
+        id
+        name
+        measurement {
+          isRange
+          quantity
+          unit
+          unitPlural
+        }
+        convertedMeasurement {
+          isRange
+          quantity
+          unit
+          unitPlural
+        }
+        hasAddedMeasurements
+        hasAlternativeIngredients
+        additional
+      }
     }
     instructionItems {
       id
       rank
       header
+      instruction {
+        id
+        text
+      }
     }
   }
 }

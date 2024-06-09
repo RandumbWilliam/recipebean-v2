@@ -17,7 +17,14 @@ export class RecipeService {
       {
         id: recipeId,
       },
-      { populate: ["ingredientItems", "instructionItems"] }
+      {
+        populate: [
+          "ingredientItems",
+          "instructionItems",
+          "ingredientItems.ingredient",
+          "instructionItems.instruction",
+        ],
+      }
     );
 
     return recipe;

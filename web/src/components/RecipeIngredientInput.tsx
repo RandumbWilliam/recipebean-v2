@@ -1,12 +1,9 @@
+import { ingredientParser } from "@/helpers/ingredient";
 import { useState } from "react";
 import { TextField } from "react-aria-components";
+import { type IngredientItem } from "./IngredientInput";
 import { IconPlus, IconX } from "./icons";
 import { Input } from "./ui/Input";
-
-export interface IngredientItem {
-  header: string;
-  ingredient: string;
-}
 
 interface RecipeIngredientInputProps {
   handleIngredientInput: (ingredientItem: IngredientItem) => void;
@@ -20,9 +17,10 @@ const initialIngredientItem = {
 const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
   handleIngredientInput,
 }) => {
-  const [ingredientItem, setIngredientItem] = useState<IngredientItem>(
-    initialIngredientItem
-  );
+  const [ingredientItem, setIngredientItem] = useState<{
+    header: string;
+    ingredient: string;
+  }>(initialIngredientItem);
   const [showIngredientHeader, setShowIngredientHeader] = useState(false);
 
   const handleIngredient = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +29,7 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
   };
 
   const submitIngredientHeader = () => {
-    if (ingredientItem.header === "") {
+    if (ingredientItem?.header) {
       setShowIngredientHeader(false);
     } else {
       submitIngredientItem();
@@ -39,7 +37,10 @@ const RecipeIngredientInput: React.FC<RecipeIngredientInputProps> = ({
   };
 
   const submitIngredientItem = () => {
-    handleIngredientInput(ingredientItem);
+    handleIngredientInput({
+      header: ingredientItem.header,
+      ingredient: ingredientParser(ingredientItem.ingredient),
+    });
 
     setIngredientItem(initialIngredientItem);
     setShowIngredientHeader(false);

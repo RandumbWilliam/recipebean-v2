@@ -18,6 +18,7 @@ export class InstructionItem extends Base<InstructionItem> {
   @Property({ type: types.string, nullable: true })
   public header?: string;
 
+  @Field(() => Instruction)
   @OneToOne(() => Instruction, (Instruction) => Instruction.instructionItem, {
     nullable: true,
   })

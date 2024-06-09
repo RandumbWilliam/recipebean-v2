@@ -1,11 +1,7 @@
 import { useState } from "react";
+import { type InstructionItem } from "./InstructionInput";
 import { IconPlus } from "./icons";
 import { Input } from "./ui/Input";
-
-export interface InstructionItem {
-  header: string;
-  instruction: string;
-}
 
 interface RecipeInstructionInputProps {
   handleInstructionInput: (instructionItem: InstructionItem) => void;
@@ -19,9 +15,10 @@ const initialInstructionItem = {
 const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
   handleInstructionInput,
 }) => {
-  const [instructionItem, setInstructionItem] = useState<InstructionItem>(
-    initialInstructionItem
-  );
+  const [instructionItem, setInstructionItem] = useState<{
+    header: string;
+    instruction: string;
+  }>(initialInstructionItem);
   const [showInstructionHeader, setShowInstructionHeader] = useState(false);
 
   const handleIngredient = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +35,10 @@ const RecipeInstructionInput: React.FC<RecipeInstructionInputProps> = ({
   };
 
   const submitInstructionItem = async () => {
-    handleInstructionInput(instructionItem);
+    handleInstructionInput({
+      header: instructionItem.header,
+      instruction: { text: instructionItem.instruction },
+    });
 
     setInstructionItem(initialInstructionItem);
     setShowInstructionHeader(false);

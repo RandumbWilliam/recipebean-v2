@@ -1,8 +1,8 @@
-import { ingredientLabel, ingredientParser } from "@/helpers/ingredient.js";
+import { ingredientLabel } from "@/helpers/ingredient.js";
 import { cn } from "@/utils/cn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FileDropItem } from "react-aria";
 import {
   DragDropContext,
@@ -15,14 +15,13 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { RecipeValidator } from "@/graphql/types";
+import Link from "next/link";
 import { DropZone, FileTrigger, TextField } from "react-aria-components";
-import RecipeIngredientInput, {
-  type IngredientItem,
-} from "./RecipeIngredientInput";
-import RecipeInstructionInput, {
-  type InstructionItem,
-} from "./RecipeInstructionInput";
-import { IconMenu, IconTrash, IconX } from "./icons";
+import IngredientInput, { type IngredientItem } from "./IngredientInput";
+import InstructionInput, { type InstructionItem } from "./InstructionInput";
+import RecipeIngredientInput from "./RecipeIngredientInput";
+import RecipeInstructionInput from "./RecipeInstructionInput";
+import { IconLeftArrowAlt, IconMenu, IconTrash, IconX } from "./icons";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 import { Button } from "./ui/button";
@@ -42,99 +41,13 @@ const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
   return <Droppable {...props}>{children}</Droppable>;
 };
 
-function EditableField({
-  reorder,
-  defaultItem,
-  onValueChange,
-  onRemove,
-}: {
-  reorder: boolean;
-  defaultItem: { header?: string; item?: string };
-  onValueChange: (item: { header?: string; item?: string }) => void;
-  onRemove: () => void;
-}) {
-  const [isEditing, setEditing] = useState(false);
-  const [value, setValue] = useState(
-    defaultItem.header ? defaultItem.header : defaultItem.item
-  );
-
-  const handleValueChange = () => {
-    if (value === "") {
-      onRemove();
-    } else {
-      if (defaultItem.header) {
-        onValueChange({
-          ...defaultItem,
-          header: value,
-        });
-      } else {
-        onValueChange({
-          ...defaultItem,
-          item: value,
-        });
-      }
-
-      setEditing(false);
-    }
-  };
-
-  const enableEditing = () => {
-    if (reorder) {
-      setEditing(false);
-    } else {
-      setEditing(!isEditing);
-    }
-  };
-
-  if (isEditing) {
-    return (
-      <TextField className="relative w-full" aria-label="ingredient">
-        <Input
-          className="pr-8"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={handleValueChange}
-          autoFocus
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleValueChange();
-          }}
-        />
-        <button
-          type="button"
-          onMouseDown={onRemove}
-          className="absolute right-1 top-2.5"
-        >
-          <IconX />
-        </button>
-      </TextField>
-    );
-  }
-
-  if (defaultItem.header) {
-    return (
-      <h5
-        className="text-primary text-lg font-semibold py-2 px-3"
-        onClick={enableEditing}
-      >
-        {value}
-      </h5>
-    );
-  } else {
-    return (
-      <p className="py-2 px-6" onClick={enableEditing}>
-        {value}
-      </p>
-    );
-  }
-}
-
 interface RecipeFormProps {
   className?: string;
   onSave: (recipeData: RecipeValidator) => void;
 }
 
 const ingredientValidationSchmea = z.object({
-  header: z.string().optional(),
+  header: z.string().nullish(),
   ingredient: z
     .object({
       name: z.array(z.string()),
@@ -162,17 +75,17 @@ const ingredientValidationSchmea = z.object({
       hasAlternativeIngredients: z.boolean(),
       additional: z.string().optional().nullable(),
     })
-    .optional()
-    .nullable(),
+    .nullish(),
 });
 
 const instructionValidationSchema = z.object({
-  header: z.string().optional(),
+  step: z.number().nullish(),
+  header: z.string().nullish(),
   instruction: z
     .object({
       text: z.string(),
     })
-    .optional(),
+    .nullish(),
 });
 
 const validationSchema = z.object({
@@ -186,7 +99,7 @@ const validationSchema = z.object({
 
       return Number(val);
     })
-    .pipe(z.number().int().nonnegative().finite().optional().default(0)),
+    .pipe(z.number().int().gte(1).lte(99).finite().optional()),
   prepTime: z
     .any()
     .transform((val) => {
@@ -194,7 +107,7 @@ const validationSchema = z.object({
 
       return Number(val);
     })
-    .pipe(z.number().int().nonnegative().finite().optional().default(0)),
+    .pipe(z.number().int().gte(0).lte(6000).finite().optional()),
   cookTime: z
     .any()
     .transform((val) => {
@@ -202,15 +115,13 @@ const validationSchema = z.object({
 
       return Number(val);
     })
-    .pipe(z.number().int().nonnegative().finite().optional().default(0)),
+    .pipe(z.number().int().gte(0).lte(6000).finite().optional()),
   imageUrl: z.string().nullish(),
   ingredientItems: z.array(ingredientValidationSchmea).optional().default([]),
   instructionItems: z.array(instructionValidationSchema).optional().default([]),
 });
 
 type RecipeData = z.infer<typeof validationSchema>;
-type IngredientData = z.infer<typeof ingredientValidationSchmea>;
-type InstructionData = z.infer<typeof instructionValidationSchema>;
 
 const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -252,6 +163,19 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
     control,
   });
 
+  const transformInstructionItemFields = useMemo(() => {
+    let stepCount = 1;
+    const transform = instructionItemFields.map((item) => {
+      if (!item.header) {
+        return { ...item, step: stepCount++ };
+      }
+
+      return item;
+    });
+
+    return transform;
+  }, [instructionItemFields]);
+
   const allowOnlyNumber = (value: string) => {
     return value.replace(/[^0-9]/g, "");
   };
@@ -263,15 +187,16 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
     }));
 
     const instructionItems = data.instructionItems.map((item, index) => ({
-      ...item,
+      header: item.header,
+      instruction: item.instruction,
       rank: index,
     }));
 
     const recipeData = {
       name: data.name,
-      servings: data.servings,
-      prepTime: data.prepTime,
-      cookTime: data.cookTime,
+      servings: data.servings || null,
+      prepTime: data.prepTime || null,
+      cookTime: data.cookTime || null,
       imageUrl: data.imageUrl || null,
       ingredientItems,
       instructionItems,
@@ -294,55 +219,19 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
   };
 
   const addIngredient = (ingredientItem: IngredientItem) => {
-    const ingredient = {} as IngredientData;
-
-    if (ingredientItem.header) {
-      ingredient.header = ingredientItem.header;
-    }
-
-    if (ingredientItem.ingredient) {
-      ingredient.ingredient = ingredientParser(ingredientItem.ingredient);
-    }
-
-    ingredientItemAppend(ingredient);
+    ingredientItemAppend(ingredientItem);
   };
 
   const addInstruction = (instructionItem: InstructionItem) => {
-    const instruction = {} as InstructionData;
-
-    if (instructionItem.header) {
-      instruction.header = instructionItem.header;
-    }
-
-    if (instructionItem.instruction) {
-      instruction.instruction = { text: instructionItem.instruction };
-    }
-
-    instructionItemAppend(instruction);
+    instructionItemAppend(instructionItem);
   };
 
-  const updateIngredientItem = (index: number, item: any) => {
-    const ingredient = {} as IngredientData;
-
-    if (item.header) {
-      ingredient.header = item.header;
-    } else {
-      ingredient.ingredient = ingredientParser(item.item);
-    }
-
-    ingredientItemUpdate(index, ingredient);
+  const updateIngredientItem = (index: number, item: IngredientItem) => {
+    ingredientItemUpdate(index, item);
   };
 
-  const updateInstructionItem = (index: number, item: any) => {
-    const ingredient = {} as InstructionData;
-
-    if (item.header) {
-      ingredient.header = item.header;
-    } else {
-      ingredient.instruction = { text: item.item };
-    }
-
-    instructionItemUpdate(index, ingredient);
+  const updateInstructionItem = (index: number, item: InstructionItem) => {
+    instructionItemUpdate(index, item);
   };
 
   const handleIngredientDrag = ({ source, destination }: DropResult) => {
@@ -365,8 +254,16 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
         if (e.key === "Enter") e.preventDefault();
       }}
     >
-      <div className="flex w-full justify-between mb-6">
-        <h1 className="h2-bold">Create Recipe</h1>
+      <div className="flex w-full items-center justify-between mb-6">
+        <div className="flex gap-3 items-center">
+          <Link
+            href="/dashboard"
+            className="flex items-center justify-center rounded-md bg-secondary h-7 w-7"
+          >
+            <IconLeftArrowAlt className="h-5 w-5 fill-secondary-foreground" />
+          </Link>
+          <h1 className="text-2xl font-bold">Create Recipe</h1>
+        </div>
         <Button type="submit">Save</Button>
       </div>
       <div className="flex flex-col w-full max-w-xl gap-6">
@@ -534,14 +431,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
                         );
                       } else {
                         return (
-                          <EditableField
+                          <IngredientInput
                             key={field.id}
                             reorder={reorderIngredient}
-                            defaultItem={{
-                              header: field.header ?? "",
-                              item: field.ingredient
-                                ? ingredientLabel(field.ingredient)
-                                : "",
+                            item={{
+                              header: field.header,
+                              ingredient: field.ingredient,
                             }}
                             onValueChange={(item) =>
                               updateIngredientItem(index, item)
@@ -581,7 +476,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
               <StrictModeDroppable droppableId="instruction-items">
                 {(provided, snapshot) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {instructionItemFields.map((field, index) => {
+                    {transformInstructionItemFields.map((field, index) => {
                       if (reorderInstruction) {
                         return (
                           <Draggable
@@ -601,9 +496,12 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
                                     {field.header}
                                   </h5>
                                 ) : (
-                                  <p className="py-2 px-6">
-                                    {field.instruction?.text}
-                                  </p>
+                                  <div className="py-2 px-6">
+                                    <b className="text-primary">
+                                      Step {field.step}
+                                    </b>
+                                    <p>{field.instruction?.text}</p>
+                                  </div>
                                 )}
                                 <div {...provided.dragHandleProps}>
                                   <IconMenu />
@@ -614,12 +512,13 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ className, onSave }) => {
                         );
                       } else {
                         return (
-                          <EditableField
+                          <InstructionInput
                             key={field.id}
                             reorder={reorderInstruction}
-                            defaultItem={{
-                              header: field.header ?? "",
-                              item: field.instruction?.text ?? "",
+                            item={{
+                              step: field.step,
+                              header: field.header,
+                              instruction: field.instruction,
                             }}
                             onValueChange={(item) =>
                               updateInstructionItem(index, item)

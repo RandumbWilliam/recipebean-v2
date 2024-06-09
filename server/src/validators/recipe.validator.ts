@@ -1,4 +1,11 @@
-import { IsArray, IsInt, IsOptional, IsString } from "class-validator";
+import {
+  IsArray,
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from "class-validator";
 import { Field, InputType } from "type-graphql";
 import IngredientItemValidator from "./ingredient_item.validator";
 import InstructionItemValidator from "./instruction_item.validator";
@@ -11,16 +18,22 @@ class RecipeValidator {
 
   @Field({ nullable: true })
   @IsInt()
+  @Min(1)
+  @Max(99)
   @IsOptional()
   public servings?: number;
 
   @Field({ nullable: true })
   @IsInt()
+  @Min(0)
+  @Max(6000)
   @IsOptional()
   public prepTime?: number;
 
   @Field({ nullable: true })
   @IsInt()
+  @Min(0)
+  @Max(6000)
   @IsOptional()
   public cookTime?: number;
 

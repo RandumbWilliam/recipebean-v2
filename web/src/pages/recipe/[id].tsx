@@ -24,14 +24,18 @@ const Recipe = () => {
       recipeId,
     },
   });
-  const [servings, setServings] = useState(data?.getRecipe.servings ?? 0);
+  const [servings, setServings] = useState<number | null>();
 
   const handleIncrementServings = () => {
-    setServings(servings + 1);
+    if (servings) {
+      setServings(servings + 1);
+    }
   };
 
   const handleDecrementServings = () => {
-    setServings(servings - 1);
+    if (servings) {
+      setServings(servings - 1);
+    }
   };
 
   const [width, setWidth] = useState(window.innerWidth);
@@ -47,6 +51,10 @@ const Recipe = () => {
       window.removeEventListener("resize", handleWindowSizeChange);
     };
   }, []);
+
+  useEffect(() => {
+    setServings(data?.getRecipe.servings);
+  }, [data]);
 
   const isMobile = width < BREAKPOINT_MD;
 
@@ -111,14 +119,19 @@ const Recipe = () => {
               <h2 className="text-2xl font-semibold w-full">{name}</h2>
               <div className="flex items-center gap-1.5">
                 <IconStopwatch className="fill-gray-400" />
-                <p>
-                  <span className="text-gray-400">Prep: </span>
-                  {prepTime}min
-                </p>
-                <p>
-                  <span className="text-gray-400">Cook: </span>
-                  {cookTime}min
-                </p>
+                {prepTime && (
+                  <p>
+                    <span className="text-gray-400">Prep: </span>
+                    {prepTime}min
+                  </p>
+                )}
+                {cookTime && (
+                  <p>
+                    <span className="text-gray-400">Cook: </span>
+                    {cookTime}min
+                  </p>
+                )}
+                {!cookTime && !prepTime && <p className="text-gray-400">-</p>}
               </div>
             </div>
           </div>
@@ -126,11 +139,13 @@ const Recipe = () => {
         <div className="flex flex-col gap-3">
           <div className="flex justify-between">
             <p className="text-lg font-medium">Ingredients</p>
-            <ServingsCounter
-              servings={servings}
-              onIncrement={handleIncrementServings}
-              onDecrement={handleDecrementServings}
-            />
+            {servings && (
+              <ServingsCounter
+                servings={servings}
+                onIncrement={handleIncrementServings}
+                onDecrement={handleDecrementServings}
+              />
+            )}
           </div>
           <div>
             {ingredientItems.length === 0 ? (

@@ -15,7 +15,7 @@ const CreateRecipe = () => {
     const result = await createRecipe({ recipeData });
 
     if (result.data?.createRecipe) {
-      console.log(result.data.createRecipe);
+      router.push(`/recipe/${result.data.createRecipe.id}`);
     }
   };
 

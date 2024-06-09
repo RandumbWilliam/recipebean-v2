@@ -18,6 +18,7 @@ export class IngredientItem extends Base<IngredientItem> {
   @Property({ type: types.string, nullable: true })
   public header?: string;
 
+  @Field(() => Ingredient)
   @OneToOne(() => Ingredient, (ingredient) => ingredient.ingredientItem, {
     nullable: true,
   })
