@@ -26,7 +26,7 @@ export class Ingredient extends Base<Ingredient> {
   @Property({ type: types.array })
   public name!: string[];
 
-  @Field(() => Measurement, { nullable: true })
+  @Field(() => [Measurement], { nullable: true })
   @Property({ type: types.array, nullable: true })
   public measurement?: Measurement[];
 

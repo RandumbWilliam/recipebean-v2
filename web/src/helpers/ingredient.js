@@ -18,12 +18,14 @@ export function ingredientParser(strIngredient) {
     additional,
   } = parser.parse(strIngredient);
 
-  const arrayMeasurments = ensureArray(measurement).map((meas) => ({
-    quantity: ensureArray(meas.quantity),
-    unit: meas.unit,
-    unitPlural: meas.unitPlural,
-    isRange: meas.isRange,
-  }));
+  const arrayMeasurments =
+    measurement &&
+    ensureArray(measurement).map((meas) => ({
+      quantity: ensureArray(meas.quantity),
+      unit: meas.unit,
+      unitPlural: meas.unitPlural,
+      isRange: meas.isRange,
+    }));
 
   return {
     name: ensureArray(name),

@@ -29,7 +29,7 @@ export type Ingredient = Base & {
   hasAddedMeasurements: Scalars['Boolean']['output'];
   hasAlternativeIngredients: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
-  measurement?: Maybe<Measurement>;
+  measurement?: Maybe<Array<Measurement>>;
   name: Array<Scalars['String']['output']>;
   updatedAt: Scalars['DateTimeISO']['output'];
 };

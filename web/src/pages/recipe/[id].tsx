@@ -9,11 +9,20 @@ import { urqlClient } from "@/utils/urqlClient";
 
 import ServingsCounter from "@/components/ServingsCounter";
 import { IconStopwatch } from "@/components/icons";
+import {
+  InstructionItemValidator,
+  MeasurementValidator,
+} from "@/graphql/types";
+import { ingredientLabel } from "@/helpers/ingredient";
 import DefaultLayout from "@/layouts/default";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const BREAKPOINT_MD = parseInt(twTheme.screens.md.slice(0, -2));
+
+interface TransformInstructionItem extends InstructionItemValidator {
+  step?: number | null;
+}
 
 const Recipe = () => {
   const router = useRouter();
@@ -25,6 +34,49 @@ const Recipe = () => {
     },
   });
   const [servings, setServings] = useState<number | null>();
+
+  const transformInstructionItems = useMemo(() => {
+    let stepCount = 1;
+    const transform = data?.getRecipe.instructionItems.map((item) => {
+      let newItem: TransformInstructionItem = { ...item };
+
+      if (!item.header) {
+        return { ...newItem, step: stepCount++ };
+      }
+
+      return newItem;
+    });
+
+    return transform;
+  }, [data]);
+
+  const transformIngredientItems = useMemo(() => {
+    const servingsMultiplier =
+      data?.getRecipe.servings && servings
+        ? data.getRecipe.servings / servings
+        : 1;
+
+    const transform = data?.getRecipe.ingredientItems.map((item) => {
+      if (!item.header) {
+        item.ingredient.measurement =
+          item.ingredient.measurement &&
+          item.ingredient.measurement.map(
+            (measurment: MeasurementValidator) => {
+              measurment.quantity =
+                measurment.quantity &&
+                measurment.quantity.map(
+                  (qty: number) => qty * servingsMultiplier
+                );
+              return measurment;
+            }
+          );
+      }
+
+      return item;
+    });
+
+    return transform;
+  }, [data, servings]);
 
   const handleIncrementServings = () => {
     if (servings) {
@@ -67,14 +119,7 @@ const Recipe = () => {
       return <div>Error</div>;
     }
 
-    const {
-      name,
-      imageUrl,
-      prepTime,
-      cookTime,
-      ingredientItems,
-      instructionItems,
-    } = data.getRecipe;
+    const { name, imageUrl, prepTime, cookTime } = data.getRecipe;
 
     return (
       <div className="flex flex-col gap-3">
@@ -136,7 +181,7 @@ const Recipe = () => {
             </div>
           </div>
         )}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1.5">
           <div className="flex justify-between">
             <p className="text-lg font-medium">Ingredients</p>
             {servings && (
@@ -148,31 +193,68 @@ const Recipe = () => {
             )}
           </div>
           <div>
-            {ingredientItems.length === 0 ? (
+            {!transformIngredientItems ||
+            transformIngredientItems.length === 0 ? (
               <p className="text-gray-400">No Ingredients.</p>
             ) : (
-              <ul>
-                {ingredientItems.map((ingredientItem, index) => (
-                  <div key={`ingredient-item-${index}`}>
-                    {JSON.stringify(ingredientItem)}
-                  </div>
-                ))}
+              <ul className="list-disc list-inside marker:text-primary">
+                {transformIngredientItems.map((ingredientItem, index) => {
+                  if (ingredientItem.header) {
+                    return (
+                      <h5
+                        key={`ingredient-item-${index}`}
+                        className="text-primary text-lg font-semibold py-2 px-3"
+                      >
+                        {ingredientItem.header}
+                      </h5>
+                    );
+                  } else {
+                    return (
+                      <li
+                        key={`ingredient-item-${index}`}
+                        className="py-2 px-6"
+                      >
+                        {ingredientLabel(ingredientItem.ingredient)}
+                      </li>
+                    );
+                  }
+                })}
               </ul>
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1.5">
           <p className="text-lg font-medium">Instructions</p>
           <div>
-            {instructionItems.length === 0 ? (
+            {!transformInstructionItems ||
+            transformInstructionItems.length === 0 ? (
               <p className="text-gray-400">No Instructions.</p>
             ) : (
               <ul>
-                {instructionItems.map((instructionItem, index) => (
-                  <div key={`ingredient-item-${index}`}>
-                    {JSON.stringify(instructionItem)}
-                  </div>
-                ))}
+                {transformInstructionItems.map((instructionItem, index) => {
+                  if (instructionItem.header) {
+                    return (
+                      <h5
+                        key={`instruction-item-${index}`}
+                        className="text-primary text-lg font-semibold py-2 px-3"
+                      >
+                        {instructionItem.header}
+                      </h5>
+                    );
+                  } else {
+                    return (
+                      <div
+                        key={`instruction-item-${index}`}
+                        className="py-2 px-6"
+                      >
+                        <b className="text-primary">
+                          Step {instructionItem.step}
+                        </b>
+                        <p>{instructionItem.instruction?.text}</p>
+                      </div>
+                    );
+                  }
+                })}
               </ul>
             )}
           </div>
