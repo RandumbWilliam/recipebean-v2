@@ -7,9 +7,10 @@ import { useSignInMutation } from "@/graphql/hooks";
 
 import AuthSidebar from "@/components/AuthSidebar";
 import { IconGoogle } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { PasswordInput } from "@/components/ui/PasswordInput";
+import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth";
 import { useRouter } from "next/router";
 import { TextField } from "react-aria-components";
@@ -24,6 +25,7 @@ const Signin = () => {
 
   const [, signin] = useSignInMutation();
   const [userData, setUserData] = useState(initialUserData);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -32,11 +34,13 @@ const Signin = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const result = await signin(userData);
 
     if (result.data?.signin) {
       router.push("/dashboard");
     }
+    setLoading(false);
   };
 
   return (
@@ -61,15 +65,16 @@ const Signin = () => {
             </TextField>
             <TextField>
               <Label>Password</Label>
-              <Input
-                type="password"
+              <PasswordInput
                 name="password"
-                placeholder="8+ characters"
+                placeholder="Password"
                 onChange={handleChange}
               />
             </TextField>
             <div className="flex flex-col mt-5">
-              <Button type="submit">Log In</Button>
+              <Button type="submit" loading={loading}>
+                Log In
+              </Button>
             </div>
           </form>
           <p className="text-center mt-5 text-sm">
