@@ -3,12 +3,13 @@ import { User } from "@entities/user.entity";
 import { MyContext } from "@interfaces/context.interface";
 import { UserService } from "@services/user.service";
 import UserValidator from "@validators/user.validator";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class UserResolver {
   public userService = new UserService();
 
+  @Authorized()
   @Mutation(() => User)
   async updateUser(
     @Arg("userData") userData: UserValidator,
@@ -20,6 +21,7 @@ export class UserResolver {
     return user;
   }
 
+  @Authorized()
   @Mutation(() => User)
   async updatePassword(
     @Arg("oldPassword") oldPassword: string,
@@ -38,6 +40,7 @@ export class UserResolver {
     return user;
   }
 
+  @Authorized()
   @Mutation(() => Boolean)
   async delete(
     @Arg("password") password: string,

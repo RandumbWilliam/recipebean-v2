@@ -23,6 +23,10 @@ import { Recipe } from "@entities/recipe.entity";
 import { User } from "@entities/user.entity";
 
 import { ErrorMiddleware } from "@middlewares/error.middleware";
+import {
+  AuthCheckerMiddleware,
+  AuthMiddleware,
+} from "./middlewares/auth.middleware";
 
 export class App {
   public app: express.Application;
@@ -140,6 +144,7 @@ export class App {
   private async initializeApolloServer(resolvers) {
     const schema = await buildSchema({
       resolvers,
+      authChecker: AuthCheckerMiddleware,
       validate: true,
     });
 
@@ -157,11 +162,19 @@ export class App {
     this.app.use(
       "/graphql",
       expressMiddleware(apolloServer, {
-        context: async ({ req, res }) => ({
-          req,
-          res,
-          redis: this.redis,
-        }),
+        context: async ({ req, res }) => {
+          try {
+            const user = await AuthMiddleware(req);
+            return {
+              req,
+              res,
+              user,
+              redis: this.redis,
+            };
+          } catch (error) {
+            throw new Error(error as string);
+          }
+        },
       })
     );
   }

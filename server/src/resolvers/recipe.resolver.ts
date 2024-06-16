@@ -1,4 +1,4 @@
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
 import { MyContext } from "@interfaces/context.interface";
 
@@ -19,6 +19,7 @@ export class RecipeResolver {
   public instructionItemService = new InstructionItemService();
   public ingredientItemService = new IngredientItemService();
 
+  @Authorized()
   @Query(() => [Recipe])
   async getUserRecipes(@Ctx() { req }: MyContext): Promise<Recipe[]> {
     const userId: string = req.session.userId!;
@@ -30,6 +31,7 @@ export class RecipeResolver {
     return recipes;
   }
 
+  @Authorized()
   @Query(() => Recipe)
   async getRecipe(@Arg("recipeId") recipeId: string): Promise<Recipe | null> {
     const recipe: Recipe | null = await this.recipeService.findById(recipeId);
@@ -37,6 +39,7 @@ export class RecipeResolver {
     return recipe;
   }
 
+  @Authorized()
   @Mutation(() => Recipe)
   async createRecipe(
     @Arg("recipeData") recipeData: RecipeValidator,
@@ -64,6 +67,7 @@ export class RecipeResolver {
     return recipe;
   }
 
+  @Authorized()
   @Mutation(() => Boolean)
   async deleteRecipe(@Arg("recipeId") recipeId: string): Promise<boolean> {
     await this.recipeService.delete(recipeId);
