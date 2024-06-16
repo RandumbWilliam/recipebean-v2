@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TextField } from "react-aria-components";
 import { type IngredientItem } from "./IngredientInput";
 import { IconPlus, IconX } from "./icons";
-import { Input } from "./ui/Input";
+import { Input } from "./ui/input";
 
 interface RecipeIngredientInputProps {
   handleIngredientInput: (ingredientItem: IngredientItem) => void;

@@ -10,11 +10,11 @@ import { useSignInMutation } from "@/graphql/hooks";
 
 import AuthSidebar from "@/components/AuthSidebar";
 import { IconError, IconGoogle } from "@/components/icons";
-import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import AuthLayout from "@/layouts/auth";
 import { useRouter } from "next/router";
 import { TextField } from "react-aria-components";

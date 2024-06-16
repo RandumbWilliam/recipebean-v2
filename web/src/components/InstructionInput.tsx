@@ -2,7 +2,7 @@ import { InstructionValidator } from "@/graphql/types";
 import { useState } from "react";
 import { TextField } from "react-aria-components";
 import { IconX } from "./icons";
-import { Input } from "./ui/Input";
+import { Input } from "./ui/input";
 
 export interface InstructionItem {
   step?: number | null;

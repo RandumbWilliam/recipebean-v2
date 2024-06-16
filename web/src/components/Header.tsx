@@ -11,7 +11,7 @@ import { twTheme } from "@/utils/twConfig";
 import clsx from "clsx";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IconLogout, IconMenu, IconX } from "./icons";
+import { IconLogout, IconMenu, IconUser, IconX } from "./icons";
 import Avatar from "./ui/Avatar";
 import Logo from "./ui/Logo";
 
@@ -102,6 +102,13 @@ const Header = () => {
                       <IconLogout />
                       <p>Log out</p>
                     </button>
+                    <Link
+                      href="/account"
+                      className="flex items-center gap-3 hover:text-primary font-medium"
+                    >
+                      <IconUser />
+                      <p>My Account</p>
+                    </Link>
                   </div>
                 </PopoverContent>
               </Popover>

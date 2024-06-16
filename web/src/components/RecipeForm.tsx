@@ -22,9 +22,9 @@ import InstructionInput, { type InstructionItem } from "./InstructionInput";
 import RecipeIngredientInput from "./RecipeIngredientInput";
 import RecipeInstructionInput from "./RecipeInstructionInput";
 import { IconLeftArrowAlt, IconMenu, IconTrash, IconX } from "./icons";
-import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
   const [enabled, setEnabled] = useState(false);

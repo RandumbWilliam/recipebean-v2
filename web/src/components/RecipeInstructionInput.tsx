@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { type InstructionItem } from "./InstructionInput";
 import { IconPlus } from "./icons";
-import { Input } from "./ui/Input";
+import { Input } from "./ui/input";
 
 interface RecipeInstructionInputProps {
   handleInstructionInput: (instructionItem: InstructionItem) => void;
