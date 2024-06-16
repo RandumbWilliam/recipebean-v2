@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import { useCallback, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useSignUpMutation } from "@/graphql/hooks";
@@ -19,6 +19,7 @@ import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth";
 import { cn } from "@/lib/utils";
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import { TextField } from "react-aria-components";
 
@@ -31,17 +32,17 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const validationSchema = z.object({
-    fullName: z.string().trim().min(1),
-    email: z.string().email().min(1),
+    fullName: z.string().trim().min(1, { message: "Required" }),
+    email: z.string().min(1, { message: "Required" }).email(),
     password: z
       .string()
-      .min(1)
+      .min(1, { message: "Required" })
       .refine(
         () => {
           return isPasswordValid;
         },
         {
-          message: "Password does not meet the requirements.",
+          message: "Does not meet the requirements",
         }
       ),
   });
@@ -50,14 +51,15 @@ const Signup = () => {
 
   const {
     register,
-    control,
     handleSubmit,
+    clearErrors,
     getValues,
     formState: { errors },
   } = useForm<UserData>({
     resolver: zodResolver(validationSchema),
     defaultValues: {},
-    mode: "onBlur",
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
   });
 
   const handlePasswordValidationChange = useCallback((isValid: boolean) => {
@@ -96,54 +98,67 @@ const Signup = () => {
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-2"
+            noValidate
           >
             <div className="flex flex-col gap-6">
               <TextField>
-                <Label>Full Name</Label>
+                <Label
+                  className={clsx({
+                    "text-destructive": errors.fullName,
+                  })}
+                >{`Full Name${
+                  errors.fullName ? ` (${errors.fullName.message})` : ""
+                }`}</Label>
                 <Input
                   type="text"
                   placeholder="Full Name"
-                  {...register("fullName")}
+                  {...register("fullName", {
+                    onChange: () => clearErrors("fullName"),
+                  })}
                 />
-                <p>{errors.fullName?.message}</p>
               </TextField>
               <TextField>
-                <Label>Email</Label>
+                <Label
+                  className={clsx({
+                    "text-destructive": errors.email,
+                  })}
+                >{`Email${
+                  errors.email ? ` (${errors.email.message})` : ""
+                }`}</Label>
                 <Input
                   type="email"
                   placeholder="Email"
-                  {...register("email")}
+                  {...register("email", {
+                    onChange: () => clearErrors("email"),
+                  })}
                 />
-                <p>{errors.email?.message}</p>
               </TextField>
-              <Controller
-                control={control}
-                name="password"
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <TextField>
-                    <Label>Password</Label>
-                    <PasswordInput
-                      placeholder="Password"
-                      onChange={(e) => {
-                        setShowPasswordRequirement(true);
-                        onChange(e.target.value);
-                      }}
-                      value={value}
-                    />
-                    <p>{error && error.message}</p>
-                    {showPasswordRequirement && (
-                      <PasswordRequirements
-                        password={getValues("password")}
-                        className="p-2"
-                        onValidateChange={handlePasswordValidationChange}
-                      />
-                    )}
-                  </TextField>
+              <TextField>
+                <Label
+                  className={clsx({
+                    "text-destructive": errors.password,
+                  })}
+                >{`Password${
+                  errors.password ? ` (${errors.password.message})` : ""
+                }`}</Label>
+                <PasswordInput
+                  placeholder="Password"
+                  {...register("password", {
+                    onChange: () => {
+                      setShowPasswordRequirement(true);
+                      clearErrors("password");
+                    },
+                  })}
+                />
+
+                {showPasswordRequirement && (
+                  <PasswordRequirements
+                    password={getValues("password")}
+                    className="p-2"
+                    onValidateChange={handlePasswordValidationChange}
+                  />
                 )}
-              />
+              </TextField>
             </div>
             <div
               className={cn(

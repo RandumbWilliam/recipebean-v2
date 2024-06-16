@@ -1,5 +1,6 @@
 export * from "./IconBookAdd";
 export * from "./IconCheckCircle";
+export * from "./IconError";
 export * from "./IconGoogle";
 export * from "./IconHide";
 export * from "./IconLeftArrowAlt";
